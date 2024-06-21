@@ -1,0 +1,117 @@
+/* userSearchbar.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.userSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #0a0909;
+    width: 100vw;
+    min-height: 100vh; /* Ensure it takes the full height of the viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+    transform: scale(0.9); /* Reduce the size of the container and its children by 10% */
+}
+
+.userSearch form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.userSearch input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.userSearch input[type="date"] {
+    padding: 9px 10px; /* Adjusted padding for consistency */
+}
+
+.userSearch button {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background-color: orange;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.userSearch button:hover {
+    background-color: #ff8c00;
+}
+
+.userSearch button:focus {
+    outline: none;
+}
+
+.bus_list {
+    height: 100%;
+    width: 40%;
+    border: 2px solid black;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.bus_list img {
+    width: 80%;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.bus_list h4 {
+    margin-top: 0;
+    color: #79f337;
+    font-size: 1.35em;
+    margin-bottom: 10px;
+}
+
+.bus_list i,
+.bus_list p,
+.bus_list span {
+    display: block;
+    margin-bottom: 10px;
+    color: #f1eeee;
+}
+
+.bus_list button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.bus_list button:hover {
+    background-color: #0056b3;
+}
+
+.bus_list button:focus {
+    outline: none;
+}

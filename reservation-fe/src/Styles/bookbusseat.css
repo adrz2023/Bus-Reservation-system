@@ -1,0 +1,73 @@
+/* Styles/bookbusseat.css */
+
+.bookbusseat {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.bookbusseat form {
+    display: flex;
+    flex-direction: column;
+}
+
+.bookseatbox1 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.bookseatbox1 h5 {
+    margin: 5px 0;
+}
+
+.bookseatbox1 input {
+    margin: 5px 0;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+}
+
+.bookbusseat button {
+    padding: 10px 15px;
+    background-color: #ff4500;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-end;
+    margin-top: 10px;
+}
+
+.bookbusseat button:hover {
+    background-color: #e63e00;
+}
+
+.bookbusseat .close-button {
+    background: none;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.bookbusseat .close-button:hover {
+    color: #ff4500;
+}
+
+.bookbusseat input::placeholder {
+    color: #999;
+}

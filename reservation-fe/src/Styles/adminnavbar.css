@@ -1,0 +1,88 @@
+/* adminnavbar.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.adminnavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color:black;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensures the navbar is above other elements */
+}
+
+.adminnavbar .logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.adminnavbar .logo h1 span {
+    color: #4facfe;
+}
+
+.adminnavbar .options {
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
+}
+
+.adminnavbar .options .NavDropDown {
+    margin-left: 20px;
+}
+
+/* Additional styles for NavDropDown component if needed */
+.NavDropDown {
+    position: relative;
+}
+
+.NavDropDown button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.NavDropDown button:hover {
+    color: #4facfe;
+}
+
+.NavDropDown .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.NavDropDown:hover .dropdown-content {
+    display: block;
+}
+
+.NavDropDown .dropdown-content a {
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.NavDropDown .dropdown-content a:hover {
+    background-color: #4facfe;
+}
+
+/* Ensure content below navbar is not hidden behind it */
+body {
+    padding-top: 60px; /* Adjust based on navbar height */
+}

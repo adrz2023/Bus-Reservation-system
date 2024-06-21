@@ -1,0 +1,79 @@
+/* styles.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.viewBus {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #0a0909;
+    min-height: 100vh; /* Ensure it takes the full height of the viewport */
+    width:100vw;
+    overflow-y: auto; /* Enable vertical scrolling */
+    transform: scale(0.9); /* Reduce the size of the container and its children by 10% */
+}
+
+.bus_details {
+    border-radius: 8px;
+    padding: 18px; /* Reduced padding */
+    width: 270px; /* Reduced width */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.bus_details:hover {
+    transform: scale(1.05);
+}
+
+.bus_details h4 {
+    margin-top: 0;
+    color: #79f337;
+    font-size: 1.35em; /* Reduced font size */
+    margin-bottom: 10px;
+}
+
+.bus_details i,
+.bus_details p,
+.bus_details span {
+    display: block;
+    margin-bottom: 10px;
+    color: #f1eeee;
+}
+
+.bus_details img {
+    width: 100%;
+    height: 180px; /* Reduced height */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bus_details button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 9px 18px; /* Reduced padding */
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.bus_details button:hover {
+    background-color: #0056b3;
+}
+
+.bus_details button:focus {
+    outline: none;
+}

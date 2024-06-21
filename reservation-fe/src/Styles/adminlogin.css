@@ -1,0 +1,82 @@
+/* adminlogin.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+     background: linear-gradient(to right, #4facfe, #00f2fe); 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.AdminLogin {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 50px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.AdminLogin form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.AdminLogin label {
+    margin-bottom: 5px;
+    font-size: 1rem;
+    color: #fff;
+    text-align: left;
+}
+
+.AdminLogin input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.AdminLogin input[type="email"],
+.AdminLogin input[type="password"] {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.AdminLogin input::placeholder {
+    color: #ddd;
+}
+
+.AdminLogin button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4facfe;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.AdminLogin button:hover {
+    background-color: #00f2fe;
+    transform: scale(1.05);
+}
+.register-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.register-link a {
+    color: #4facfe;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.register-link a:hover {
+    color: #00f2fe;
+}

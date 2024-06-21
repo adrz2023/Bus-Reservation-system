@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, hsl(208, 99%, 65%), #00f2fe); 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.LandingPage {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    padding:90px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sub_lp {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.sub_lp a {
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.sub_lp a h3 {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sub_lp a:hover h3 {
+    transform: scale(1.2);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+ .logo h1 {
+    padding-bottom: 15px;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+ .logo h1 span {
+    color: #4facfe;
+}

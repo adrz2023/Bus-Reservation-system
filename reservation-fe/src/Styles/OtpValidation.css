@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.OtpValidation {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 350px;
+    width: 100%;
+}
+
+.OtpValidation form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.OtpValidation label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: left;
+}
+
+.OtpValidation input {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.OtpValidation input[type="text"] {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.OtpValidation input::placeholder {
+    color: #ddd;
+}
+
+.OtpValidation button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4facfe;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.OtpValidation button:hover {
+    background-color: #00f2fe;
+    transform: scale(1.05);
+}
