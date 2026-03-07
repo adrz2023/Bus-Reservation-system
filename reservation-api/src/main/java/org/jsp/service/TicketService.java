@@ -1,5 +1,7 @@
 package org.jsp.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -58,6 +60,31 @@ public class TicketService {
 		structure.setStatuscode(HttpStatus.OK.value());
 		return ResponseEntity.status(HttpStatus.OK).body(structure);
 	}
+
+
+	public ResponseEntity<ResponseStructure<List<TicketResponse>>> findTicketsByUserId(int userId){
+		ResponseStructure<List<TicketResponse>> structure = new ResponseStructure<>();
+
+		Optional<User> recUser = userDao.findById(userId);
+		if(recUser.isEmpty())
+			throw new AdminNotFoundException("User not found");
+		User dbUser = recUser.get();
+
+		List<Ticket> tickets = ticketDao.findByUserId(userId);
+		List<TicketResponse> responses = new ArrayList<>();
+
+		for (Ticket ticket : tickets) {
+			Bus bus = ticket.getBus();
+			TicketResponse ticketResponse = mapToTicketResponse(ticket, dbUser, bus);
+			responses.add(ticketResponse);
+		}
+			structure.setData(responses);
+			structure.setMessege("Tickets booked by user");
+			structure.setStatuscode(HttpStatus.OK.value());
+			return ResponseEntity.status(HttpStatus.OK).body(structure);
+	}
+
+
 
 
 	private TicketResponse mapToTicketResponse(Ticket ticket, User user, Bus bus) {
