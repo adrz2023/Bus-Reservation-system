@@ -4,19 +4,19 @@
 // const LandingPage=()=>{
 //     return(
 
-       
-            
+
+
 //         <div className="LandingPage">
 //         <div className="logo">
 //                 <h1><span>~Be</span>fik<span> / </span>Re<span>Yatra</span></h1>
 //             <div className="sub_lp">
 //             <Link to="/adminlogin">
-                
+
 //                     <h3>Admin</h3>
 //                 </Link>
-                
+
 //                 <Link to="/userlogin">
-                   
+
 //                     <h3>User</h3>
 //                 </Link>
 //             </div>
@@ -278,7 +278,7 @@ export default function LandingPage() {
               <div className="lpProfileMenuSub">My Profile</div>
             </div>
           </div>
-          <button type="button" className="lpProfileMenuItem">
+          <button type="button" className="lpProfileMenuItem" onClick={() => navigate('/userbookings')}>
             <span className="lpProfileMenuItemTitle">My Bookings</span>
             <span className="lpProfileMenuItemSub">View &amp; manage bookings</span>
           </button>
@@ -300,8 +300,8 @@ export default function LandingPage() {
         <div className="lpHeroInner">
           <h1>India's Fastest Bus Ticket Booking Platform </h1>
           <p className="lpHero">
-Compare routes & prices, and book instantly with live availability, secure payments, and trusted operators for a smooth, comfortable travel experience.     
-     </p>
+            Compare routes & prices, and book instantly with live availability, secure payments, and trusted operators for a smooth, comfortable travel experience.
+          </p>
 
           <form className="lpSearch" onSubmit={searchBuses}>
             <input

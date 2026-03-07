@@ -1,0 +1,116 @@
+.user-bookings-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Inter', Roboto, sans-serif;
+}
+
+.bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.bookings-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.booking-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    background: #f5f5f5;
+}
+
+.tab-btn.active {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    background: #fff5f5;
+    font-weight: 500;
+}
+
+.no-bookings-alert {
+    padding: 15px 20px;
+    border: 1px solid #ffb3b3;
+    border-radius: 8px;
+    background-color: #fffafa;
+    color: #d83b3b;
+    font-size: 15px;
+}
+
+.tickets-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ticket-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+}
+
+.ticket-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.ticket-route {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.ticket-details p {
+    margin: 3px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.ticket-status {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-upcoming {
+    background: #e6f4ea;
+    color: #1e8e3e;
+}
+
+.status-past {
+    background: #f1f3f4;
+    color: #5f6368;
+}
+
+.status-cancelled {
+    background: #fce8e6;
+    color: #d93025;
+}
