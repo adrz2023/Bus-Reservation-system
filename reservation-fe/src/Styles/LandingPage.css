@@ -1,4 +1,4 @@
-body {
+/* body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: linear-gradient(to right, hsl(208, 99%, 65%), #00f2fe); 
@@ -51,4 +51,767 @@ body {
 
  .logo h1 span {
     color: #4facfe;
+} */
+
+
+
+/* Professional landing page styles (scoped) */
+
+/* Reset any global gradients/margins so the landing page
+   has a clean, full‑width background with no top gap. */
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f7fb !important;
+  min-height: 100vh;
+  height: auto !important;
+  overflow-y: auto;
+  padding-top: 0 !important; /* override adminnavbar.css */
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.lpRoot {
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #111827;
+  width: 100vw;
+}
+
+.lpNav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+}
+
+.lpBrand {
+  cursor: pointer;
+  text-align: left;
+}
+
+.lpBrandTitle {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  font-size: 18px;
+}
+
+.lpAccent {
+  color: #2563eb;
+}
+
+.lpBrandTag {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.lpNavLinks {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.lpNavLink {
+  color: #111827;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.lpNavLink:hover {
+  background: #eef2ff;
+}
+
+.lpBtn {
+  background: #ef4444; /* redbus-like primary */
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lpBtn:hover {
+  filter: brightness(0.95);
+}
+
+.lpBtnGhost {
+  background: transparent;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+
+.lpBtnGhost:hover {
+  background: #ffffff;
+}
+
+.lpLinkBtn {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.lpLinkBtn:hover {
+  background: #eef2ff;
+}
+
+.lpHero {
+  background: radial-gradient(1200px 500px at 20% 20%, #fee2e2, transparent),
+              radial-gradient(1200px 500px at 80% 0%, #dbeafe, transparent),
+              linear-gradient(180deg, #ffffff, #f6f7fb);
+  padding: 44px 18px 26px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lpHeroInner {
+  max-width: none;
+  margin: 0;
+  padding: 0 48px;
+  text-align: left;
+}
+
+.lpHeroInner h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+.lpSub {
+  margin: 10px 0 18px;
+  color: #4b5563;
+  max-width: 720px;
+}
+
+.lpSearch {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 0.9fr auto;
+  gap: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+}
+
+.lpSearch input {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.lpSearch input:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.lpTrust {
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lpTrustItem {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: #374151;
+}
+
+.lpMain {
+  max-width: none;
+  margin: 0;
+  padding: 24px 48px 40px;
+}
+
+.lpSectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0;
+}
+
+.lpSectionHead h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.lpEmpty {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 18px;
+  color: #374151;
+}
+
+.lpError {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #991b1b;
+}
+
+.lpGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.busCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.busCardImg img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.busImgFallback {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.busCardBody {
+  padding: 14px 14px 16px;
+  text-align: left;
+}
+
+.busCardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.busName {
+  margin: 0;
+  font-size: 16px;
+}
+
+.busPrice {
+  font-weight: 900;
+  color: #111827;
+}
+
+.busPrice span {
+  font-weight: 700;
+  color: #6b7280;
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.busRoute {
+  margin-top: 8px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.busArrow {
+  color: #ef4444;
+}
+
+.busMeta {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.busActions {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.busHint {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.lpFooterInfo {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 14px;
+}
+
+.lpFooterCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 16px;
+  text-align: left;
+}
+
+.lpFooterCard h3 {
+  margin: 0 0 10px;
+}
+
+.lpFooterCard ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #374151;
+}
+
+/* Global footer */
+
+.lpFooter {
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 32px;
+}
+
+.lpFooterTop {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 32px;
+  padding: 32px 48px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lpFooterBrand {
+  max-width: 420px;
+}
+
+.lpFooterLogo {
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.lpFooterBrand p {
+  margin: 0 0 8px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.lpFooterCols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.lpFooterCol h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+}
+
+.lpFooterCol ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lpFooterCol li {
+  margin-bottom: 6px;
+}
+
+.lpFooterCol button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: #111827;
+  text-align: left;
+}
+
+.lpFooterCol button:hover {
+  color: #ef4444;
+}
+
+.lpFooterBottom {
+  border-top: 1px solid #f3f4f6;
+  padding: 12px 48px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.lpFooterSocial {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lpFooterDots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.lpFooterDots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #d1d5db;
+}
+
+/* Auth modal overlay (login/register) */
+
+.lpAuthBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 200;
+}
+
+.lpAuthCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.3fr);
+  max-width: 900px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.45);
+}
+
+.lpAuthLeft {
+  padding: 28px 24px;
+  background: radial-gradient(circle at top left, #fee2e2, transparent 60%),
+              radial-gradient(circle at bottom, #dbeafe, transparent 55%),
+              #f9fafb;
+}
+
+.lpAuthLeft h2 {
+  margin: 0 0 10px;
+}
+
+.lpAuthLeft p {
+  margin: 0 0 12px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.lpAuthLeft ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.lpAuthRight {
+  padding: 24px 24px 26px;
+}
+
+.lpAuthTabs {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  margin-bottom: 14px;
+}
+
+.lpAuthTabs button {
+  border: none;
+  background: transparent;
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.lpAuthTabs button.active {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18);
+}
+
+.lpAuthError {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.lpAuthForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lpAuthForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.lpAuthForm input,
+.lpAuthForm select {
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.lpAuthRow {
+  display: flex;
+  gap: 10px;
+}
+
+.lpAuthForm button.lpBtn {
+  margin-top: 4px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Profile chip when logged in */
+
+.lpProfileChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f3f4f6;
+}
+
+.lpProfileAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #111827;
+  color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lpProfileName {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Profile chip + dropdown menu */
+
+.lpProfileChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.lpProfileChip:hover {
+  background: #e5e7eb;
+}
+
+.lpProfileLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.lpProfileMenu {
+  position: fixed;
+  top: 60px;
+  right: 32px;
+  width: 260px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.4);
+  padding: 10px 10px 8px;
+  z-index: 210;
+}
+
+.lpProfileMenuHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.lpProfileMenuAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #111827;
+  color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lpProfileMenuText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lpProfileMenuName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.lpProfileMenuSub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.lpProfileMenuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.lpProfileMenuItem[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.lpProfileMenuItem:hover:not([disabled]) {
+  background: #f3f4f6;
+}
+
+.lpProfileMenuItemTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.lpProfileMenuItemSub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.lpProfileMenuLogout {
+  margin-top: 4px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.lpModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 100;
+}
+
+.lpModal {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+  padding: 18px;
+  text-align: left;
+}
+
+.lpModal h3 {
+  margin: 0 0 8px;
+}
+
+.lpModal p {
+  margin: 0 0 14px;
+  color: #4b5563;
+}
+
+.lpModalActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .lpGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lpSearch {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .lpGrid {
+    grid-template-columns: 1fr;
+  }
+  .lpFooterInfo {
+    grid-template-columns: 1fr;
+  }
 }

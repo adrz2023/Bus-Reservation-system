@@ -35,8 +35,8 @@ public class BusDao {
 	}
 	
 	
-	public List<Bus> FindBuses (String to_location,String from_loaction, LocalDate bus_depurture ){
-		return busRepository.FindBuses(to_location, from_loaction, bus_depurture);
+	public List<Bus> FindBuses (String from_loaction,String to_location, LocalDate bus_depurture ){
+		return busRepository.FindBuses(from_loaction, to_location, bus_depurture);
 	}
 
 	public void delete(int id) {
