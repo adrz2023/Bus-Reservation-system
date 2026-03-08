@@ -37,9 +37,9 @@ public class BusController {
 	
 	private BusService busService;
 	
-	@PostMapping("/{adminId}")
-	public ResponseEntity<ResponseStructure<BusResponse>> saveBus(@RequestBody BusRequest busRequest ,@PathVariable(name="adminId") int adminId){
-		return busService.saveBus(busRequest, adminId);
+	@PostMapping("/{vendorId}")
+	public ResponseEntity<ResponseStructure<BusResponse>> saveBus(@RequestBody BusRequest busRequest ,@PathVariable(name="vendorId") int vendorId){
+		return busService.saveBus(busRequest, vendorId);
 	}
 	
 	@PutMapping("/{id}")
@@ -65,10 +65,11 @@ public class BusController {
 		return busService.findBuses(from_location, to_location, bus_depurture);
 	}
 
-	@GetMapping("/find/{admin_id}")
-	public ResponseEntity<ResponseStructure<List<Bus>>> findByAdminId(@PathVariable int admin_id) {
-		return busService.findByAdminId(admin_id);
+	@GetMapping("/find/{vendor_id}")
+	public ResponseEntity<ResponseStructure<List<Bus>>> findByVendorId(@PathVariable int vendor_id) {
+		return busService.findByAdminId(vendor_id);
 	}
+
 	
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<ResponseStructure<String>> deleteById(@PathVariable(value = "id") int id){

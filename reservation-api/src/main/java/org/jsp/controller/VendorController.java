@@ -2,11 +2,11 @@ package org.jsp.controller;
 
 import java.io.IOException;
 
-import org.jsp.dto.AdminRequest;
-import org.jsp.dto.AdminResponse;
+import org.jsp.dto.VendorRequest;
+import org.jsp.dto.VendorResponse;
 import org.jsp.dto.ResponseStructure;
 
-import org.jsp.service.AdminService;
+import org.jsp.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,58 +26,58 @@ import jakarta.validation.Valid;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController {
+public class VendorController {
 @Autowired
-private AdminService adminService;
+private VendorService vendorService;
 @PostMapping
-public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@Valid @RequestBody AdminRequest adminRequest,
-		HttpServletRequest request) {
-	return adminService.saveAdmin(adminRequest, request);
+public ResponseEntity<ResponseStructure<VendorResponse>> saveAdmin(@Valid @RequestBody VendorRequest vendorRequest,
+																   HttpServletRequest request) {
+	return vendorService.saveVendor(vendorRequest, request);
 }
 
 @PutMapping("/{id}")
-public ResponseEntity<ResponseStructure<AdminResponse>> updateAdmin(@RequestBody AdminRequest adminRequest,
-		@PathVariable int id) {
-	return adminService.update(adminRequest, id);
+public ResponseEntity<ResponseStructure<VendorResponse>> updateAdmin(@RequestBody VendorRequest vendorRequest,
+																	 @PathVariable int id) {
+	return vendorService.update(vendorRequest, id);
 }
 
 @GetMapping("{id}")
-public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@PathVariable int id) {
-	return adminService.findById(id);
+public ResponseEntity<ResponseStructure<VendorResponse>> saveAdmin(@PathVariable int id) {
+	return vendorService.findById(id);
 }
 
 @PostMapping("/verifyByPhone")
-public ResponseEntity<ResponseStructure<AdminResponse>> verify(@RequestParam long phone,
-		@RequestParam String password) {
-	return adminService.verify(phone, password);
+public ResponseEntity<ResponseStructure<VendorResponse>> verify(@RequestParam long phone,
+																@RequestParam String password) {
+	return vendorService.verify(phone, password);
 }
 
 @PostMapping("/verifyByEmail")
-public ResponseEntity<ResponseStructure<AdminResponse>> verify(@RequestParam String email,
-		@RequestParam String password) {
-	return adminService.verify(email, password);
+public ResponseEntity<ResponseStructure<VendorResponse>> verify(@RequestParam String email,
+																@RequestParam String password) {
+	return vendorService.verify(email, password);
 }
 
 @DeleteMapping("/{id}")
 public ResponseEntity<ResponseStructure<String>> delete(@PathVariable int id) {
-	return adminService.delete(id);
+	return vendorService.delete(id);
 }
 
 @GetMapping("/activate")
 public String activate(@RequestParam String token) {
-	return adminService.activate(token);
+	return vendorService.activate(token);
 }
 
 
 @PostMapping("/forgot-password")
 public String forgotPassword(@RequestParam String email,HttpServletRequest request) {
-	return adminService.forgotPassword(email, request);
+	return vendorService.forgotPassword(email, request);
 }
 
 @GetMapping("/verify-link")
 public void verifyResetPasswordLink(@RequestParam String token,HttpServletResponse response) {
-	AdminResponse adminResponse= adminService.verifyLink(token);
-	if(adminResponse !=null)
+	VendorResponse vendorResponse= vendorService.verifyLink(token);
+	if(vendorResponse !=null)
 		try {
 			response.sendRedirect("http://localhost:3000/reset-password");
 		}

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class AdminRequest {
+public class VendorRequest {
 
 	private long phone;
 	@Email(message = "Invalid Format")

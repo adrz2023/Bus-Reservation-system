@@ -51,9 +51,9 @@ public class Bus {
      private double costPerSeat;
  	
      @ManyToOne
-     @JoinColumn(name="admin_id")
+     @JoinColumn(name="vendor_id")
      @JsonIgnore
-     private Admin admin;
+     private Vendor vendor;
      
      @OneToMany(mappedBy = "bus")
  	private List<Ticket> bookedTickets;

@@ -2,13 +2,13 @@ package org.jsp.service;
 
 import java.util.Optional;
 
-import org.jsp.dao.AdminDao;
-import org.jsp.dto.AdminRequest;
-import org.jsp.dto.AdminResponse;
+import org.jsp.dao.VendorDao;
+import org.jsp.dto.VendorRequest;
+import org.jsp.dto.VendorResponse;
 import org.jsp.dto.EmailConfiguration;
 import org.jsp.dto.ResponseStructure;
 import org.jsp.exception.AdminNotFoundException;
-import org.jsp.model.Admin;
+import org.jsp.model.Vendor;
 import org.jsp.util.AccountStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
-public class AdminService {
+public class VendorService {
 
 	@Autowired
-	private AdminDao adminDao;
+	private VendorDao vendorDao;
 	@Autowired
 	private ReservationApiMailService mailservice;
 	@Autowired
@@ -29,12 +29,12 @@ public class AdminService {
 	@Autowired
 	private EmailConfiguration emailConfiguration;
 	
-	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(AdminRequest adminRequest,
-			HttpServletRequest request) {
-		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
-		Admin admin = mapToAdmin(adminRequest);
+	public ResponseEntity<ResponseStructure<VendorResponse>> saveVendor(VendorRequest adminRequest,
+																		HttpServletRequest request) {
+		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
+		Vendor admin = mapToAdmin(adminRequest);
 		admin.setStatus(AccountStatus.IN_ACTIVE.toString());
-		admin = adminDao.saveAdmin(admin);
+		admin = vendorDao.saveAdmin(admin);
 		String activation_link = linkGeneratorService.getActivationLink(admin, request);
 		emailConfiguration.setSubject("Activate Your Account");
 		emailConfiguration.setText(
@@ -47,18 +47,18 @@ public class AdminService {
 	}
 	
 	
-	public ResponseEntity<ResponseStructure<AdminResponse>> update(AdminRequest adminRequest, int id) {
-		Optional<Admin> recAdmin = adminDao.findById(id);
-		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
+	public ResponseEntity<ResponseStructure<VendorResponse>> update(VendorRequest adminRequest, int id) {
+		Optional<Vendor> recAdmin = vendorDao.findById(id);
+		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
 		if (recAdmin.isPresent()) {
-			Admin dbAdmin = recAdmin.get();
+			Vendor dbAdmin = recAdmin.get();
 			dbAdmin.setEmail(adminRequest.getEmail());
 			dbAdmin.setGst_number(adminRequest.getGst_number());
 			dbAdmin.setName(adminRequest.getName());
 			dbAdmin.setPhone(adminRequest.getPhone());
 			dbAdmin.setPassword(adminRequest.getPassword());
 			dbAdmin.setTravels_name(adminRequest.getTravels_name());
-			structure.setData(mapToAdminResponse(adminDao.saveAdmin(dbAdmin)));
+			structure.setData(mapToAdminResponse(vendorDao.saveAdmin(dbAdmin)));
 			structure.setMessege("Admin updated");
 			structure.setStatuscode(HttpStatus.ACCEPTED.value());
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
@@ -68,9 +68,9 @@ public class AdminService {
 	
 	
 	
-	public ResponseEntity<ResponseStructure<AdminResponse>> findById(int id) {
-		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
-		Optional<Admin> dbAdmin = adminDao.findById(id);
+	public ResponseEntity<ResponseStructure<VendorResponse>> findById(int id) {
+		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
+		Optional<Vendor> dbAdmin = vendorDao.findById(id);
 		if (dbAdmin.isPresent()) {
 			structure.setData(mapToAdminResponse(dbAdmin.get()));
 			structure.setMessege("Admin found");
@@ -85,9 +85,9 @@ public class AdminService {
 	
 	
 	
-	public ResponseEntity<ResponseStructure<AdminResponse>> verify(long phone, String password) {
-		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
-		Optional<Admin> dbAdmin = adminDao.verify(phone, password);
+	public ResponseEntity<ResponseStructure<VendorResponse>> verify(long phone, String password) {
+		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
+		Optional<Vendor> dbAdmin = vendorDao.verify(phone, password);
 		if (dbAdmin.isPresent()) {
 			structure.setData(mapToAdminResponse(dbAdmin.get()));
 			structure.setMessege("verification succcessfull");
@@ -97,9 +97,9 @@ public class AdminService {
 		return ResponseEntity.status(HttpStatus.OK).body(structure);
 	}
 	
-	public ResponseEntity<ResponseStructure<AdminResponse>> verify(String email, String password) {
-		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
-		Optional<Admin> dbAdmin = adminDao.verify(email, password);
+	public ResponseEntity<ResponseStructure<VendorResponse>> verify(String email, String password) {
+		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
+		Optional<Vendor> dbAdmin = vendorDao.verify(email, password);
 		if (dbAdmin.isPresent()) {
 			structure.setData(mapToAdminResponse(dbAdmin.get()));
 			structure.setMessege("verification succcessfull");
@@ -111,9 +111,9 @@ public class AdminService {
 	
 	public ResponseEntity<ResponseStructure<String>> delete(int id) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
-		Optional<Admin> dbAdmin = adminDao.findById(id);
+		Optional<Vendor> dbAdmin = vendorDao.findById(id);
 		if (dbAdmin.isPresent()) {
-			adminDao.delete(id);
+			vendorDao.delete(id);
 			structure.setData("Admin Found");
 			structure.setMessege("deleted");
 			structure.setStatuscode(HttpStatus.OK.value());
@@ -124,34 +124,34 @@ public class AdminService {
 }
 	
 	 
-	private Admin mapToAdmin(AdminRequest adminRequest) {
-		return Admin.builder().email(adminRequest.getEmail()).name(adminRequest.getName()).phone(adminRequest.getPhone()).gst_number(adminRequest.getGst_number()).travels_name(adminRequest.getTravels_name()).password(adminRequest.getPassword()).build();
+	private Vendor mapToAdmin(VendorRequest adminRequest) {
+		return Vendor.builder().email(adminRequest.getEmail()).name(adminRequest.getName()).phone(adminRequest.getPhone()).gst_number(adminRequest.getGst_number()).travels_name(adminRequest.getTravels_name()).password(adminRequest.getPassword()).build();
 	}
 	
-	private AdminResponse mapToAdminResponse(Admin admin) {
-		return AdminResponse.builder().name(admin.getName()).email(admin.getEmail()).id(admin.getId())
+	private VendorResponse mapToAdminResponse(Vendor admin) {
+		return VendorResponse.builder().name(admin.getName()).email(admin.getEmail()).id(admin.getId())
 				.gst_number(admin.getGst_number()).phone(admin.getPhone()).travels_name(admin.getTravels_name())
 				.password(admin.getPassword()).build();
 	}
 	
 	public String activate(String token) {
-		Optional<Admin> recAdmin = adminDao.findByToken(token);
+		Optional<Vendor> recAdmin = vendorDao.findByToken(token);
 		if (recAdmin.isEmpty())
 			throw new AdminNotFoundException("Invalid Token");
-		Admin dbAdmin = recAdmin.get();
+		Vendor dbAdmin = recAdmin.get();
 		dbAdmin.setStatus("ACTIVE");
 		dbAdmin.setToken(null);
-		adminDao.saveAdmin(dbAdmin);
+		vendorDao.saveAdmin(dbAdmin);
 		return "Your Account has been activated";
 	}
 	
 	
 	public String forgotPassword(String email,HttpServletRequest request) {
-		Optional<Admin> recAdmin=adminDao.findByEmail(email);
+		Optional<Vendor> recAdmin= vendorDao.findByEmail(email);
 		
 		if(recAdmin.isEmpty())
 			throw new AdminNotFoundException("Invalid email");
-		Admin admin=recAdmin.get();
+		Vendor admin=recAdmin.get();
 		String resetPasswordLink=linkGeneratorService.getResetPasswordLink(admin, request);
 		emailConfiguration.setToAddress(email);
 		emailConfiguration.setText("please click on the following  link to reset your password");
@@ -160,14 +160,14 @@ public class AdminService {
 		return "reset password link has been sent registered mail id";
 	}
 	
-	public AdminResponse verifyLink(String token) {
-		Optional<Admin> recAdmin=adminDao.findByToken(token);
+	public VendorResponse verifyLink(String token) {
+		Optional<Vendor> recAdmin= vendorDao.findByToken(token);
 		if(recAdmin.isEmpty())
 			throw new AdminNotFoundException("Link has been expired");
-		Admin dbAdmin=recAdmin.get();
-		dbAdmin.setToken(null);
-		adminDao.saveAdmin(dbAdmin);
-		return mapToAdminResponse(dbAdmin);
+		Vendor dbVendor=recAdmin.get();
+		dbVendor.setToken(null);
+		vendorDao.saveAdmin(dbVendor);
+		return mapToAdminResponse(dbVendor);
 	}
 	
 }

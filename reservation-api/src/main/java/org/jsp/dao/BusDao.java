@@ -28,9 +28,9 @@ public class BusDao {
 	}
 	
 	
-	public List<Bus> finBusesByAdminId (int admin_id){
+	public List<Bus> finBusesByVendorId(int vendor_id){
 		
-	return busRepository.findBusesByAdminId(admin_id);
+	return busRepository.findBusesByVendorId(vendor_id);
 		
 	}
 	

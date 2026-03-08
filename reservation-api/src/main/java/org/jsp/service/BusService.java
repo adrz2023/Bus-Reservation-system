@@ -4,14 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import javax.security.auth.login.AccountNotFoundException;
-
-import org.jsp.dao.AdminDao;
+import org.jsp.dao.VendorDao;
 import org.jsp.dao.BusDao;
 import org.jsp.dto.BusRequest;
 import org.jsp.dto.BusResponse;
 import org.jsp.dto.ResponseStructure;
-import org.jsp.model.Admin;
+import org.jsp.model.Vendor;
 import org.jsp.model.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,21 +19,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class BusService {
 @Autowired	
-private AdminDao adminDao;
+private VendorDao adminDao;
 @Autowired
 private BusDao busDao;
 
 public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequest,int adminId){
 	ResponseStructure<BusResponse> structure= new ResponseStructure<>();
 	
-	Optional<Admin> optional=adminDao.findById(adminId);
+	Optional<Vendor> optional=adminDao.findById(adminId);
 	
 	if(optional.isPresent()) {
-		Admin ad=optional.get();
+		Vendor ad=optional.get();
 		ad.getBuses().add(mapToBus(busRequest));
 		Bus bus=mapToBus(busRequest);
 		bus.setAvailableSeats(bus.getSeats());
-		bus.setAdmin(ad);
+		bus.setVendor(ad);
 		adminDao.saveAdmin(ad);
 		structure.setMessege("bus added");
 		structure.setStatuscode(HttpStatus.CREATED.value());
@@ -97,9 +95,9 @@ public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(String from_locati
 }
 
 
-public ResponseEntity<ResponseStructure<List<Bus>>> findByAdminId(int admin_id){
+public ResponseEntity<ResponseStructure<List<Bus>>> findByAdminId(int vendor_id){
 	ResponseStructure<List<Bus>> structure =new ResponseStructure<>();
-	List<Bus> buses=busDao.finBusesByAdminId(admin_id);
+	List<Bus> buses=busDao.finBusesByVendorId(vendor_id);
 	structure.setData(buses);
 	structure.setMessege("List of Buses for entered Amdin id");
 	structure.setStatuscode(HttpStatus.OK.value());

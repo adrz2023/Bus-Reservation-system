@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdminResponse {
+public class VendorResponse {
 
    private int id;
 	private long phone;

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Admin {
+public class Vendor {
 @Id
 @GeneratedValue(strategy=GenerationType.IDENTITY)
 
@@ -39,7 +39,7 @@ private String password;
 private String token;
 @Column(nullable=false)
 private String status;
-@OneToMany(mappedBy="admin")
+@OneToMany(mappedBy="vendor")
 private List<Bus> buses;
 
 }
