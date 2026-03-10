@@ -32,16 +32,17 @@ public class VendorService {
 	public ResponseEntity<ResponseStructure<VendorResponse>> saveVendor(VendorRequest adminRequest,
 																		HttpServletRequest request) {
 		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
-		Vendor admin = mapToAdmin(adminRequest);
-		admin.setStatus(AccountStatus.IN_ACTIVE.toString());
-		admin = vendorDao.saveAdmin(admin);
-		String activation_link = linkGeneratorService.getActivationLink(admin, request);
+		Vendor vendor = mapToAdmin(adminRequest);
+		vendor.setStatus(AccountStatus.IN_ACTIVE.toString());
+		vendor.setStatus("PENDING_APPROVAL");
+		vendor = vendorDao.saveAdmin(vendor);
+		String activation_link = linkGeneratorService.getActivationLink(vendor, request);
 		emailConfiguration.setSubject("Activate Your Account");
 		emailConfiguration.setText(
 				"Dear Admin Please Activate Your Account by clicking on the following link:" + activation_link);
-		emailConfiguration.setToAddress(admin.getEmail());
+		emailConfiguration.setToAddress(vendor.getEmail());
 		structure.setMessege(mailservice.sendMail(emailConfiguration));
-		structure.setData(mapToAdminResponse(admin));
+		structure.setData(mapToAdminResponse(vendor));
 		structure.setStatuscode(HttpStatus.CREATED.value());
 		return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 	}
