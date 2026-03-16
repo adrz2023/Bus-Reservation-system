@@ -1,5 +1,6 @@
 package org.jsp.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jsp.model.Vendor;
@@ -17,7 +18,9 @@ public Vendor saveAdmin(Vendor vendor) {
 	return vendorRepository.save(vendor);
 }
 
-
+	public List<Vendor> findAll(){
+		return (List<Vendor>) vendorRepository.findAll();
+	}
 
 public Optional<Vendor> findById(int id){
 	return vendorRepository.findById(id);

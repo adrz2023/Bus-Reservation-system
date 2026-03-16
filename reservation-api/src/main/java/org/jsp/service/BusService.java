@@ -23,13 +23,19 @@ private VendorDao adminDao;
 @Autowired
 private BusDao busDao;
 
-public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequest,int adminId){
+public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequest,int vendorId){
 	ResponseStructure<BusResponse> structure= new ResponseStructure<>();
 	
-	Optional<Vendor> optional=adminDao.findById(adminId);
+	Optional<Vendor> optional=adminDao.findById(vendorId);
 	
 	if(optional.isPresent()) {
 		Vendor ad=optional.get();
+
+		if(!"APPROVED".equalsIgnoreCase(ad.getApprovalStatus())){
+			structure.setMessege("Vendor is not approved yet");
+			structure.setStatuscode(HttpStatus.FORBIDDEN.value());
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(structure);
+		}
 		ad.getBuses().add(mapToBus(busRequest));
 		Bus bus=mapToBus(busRequest);
 		bus.setAvailableSeats(bus.getSeats());

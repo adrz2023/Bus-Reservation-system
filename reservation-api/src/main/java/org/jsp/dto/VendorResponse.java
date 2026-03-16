@@ -18,7 +18,7 @@ public class VendorResponse {
 	private String name;
 	private String travels_name;
 	private String password;
-	
+	private String approvalStatus;
 	
 	
 	

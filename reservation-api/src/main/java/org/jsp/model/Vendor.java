@@ -39,6 +39,7 @@ private String password;
 private String token;
 @Column(nullable=false)
 private String status;
+private String approvalStatus;
 @OneToMany(mappedBy="vendor")
 private List<Bus> buses;
 
