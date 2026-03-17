@@ -10,6 +10,7 @@ import org.jsp.dto.ResponseStructure;
 import org.jsp.exception.AdminNotFoundException;
 import org.jsp.model.Vendor;
 import org.jsp.util.AccountStatus;
+import org.jsp.util.ApprovalStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class VendorService {
 		ResponseStructure<VendorResponse> structure = new ResponseStructure<>();
 		Vendor vendor = mapToAdmin(adminRequest);
 		vendor.setStatus(AccountStatus.IN_ACTIVE.toString());
-		vendor.setApprovalStatus("PENDING_APPROVAL");
+		vendor.setApprovalStatus(ApprovalStatus.PENDING_APPROVAL);
 		vendor = vendorDao.saveAdmin(vendor);
 		String activation_link = linkGeneratorService.getActivationLink(vendor, request);
 		emailConfiguration.setSubject("Activate Your Account");
@@ -132,7 +133,7 @@ public class VendorService {
 	private VendorResponse mapToAdminResponse(Vendor admin) {
 		return VendorResponse.builder().name(admin.getName()).email(admin.getEmail()).id(admin.getId())
 				.gst_number(admin.getGst_number()).phone(admin.getPhone()).travels_name(admin.getTravels_name())
-				.password(admin.getPassword()).approvalStatus(admin.getApprovalStatus()).build();
+				.password(admin.getPassword()).approvalStatus(admin.getApprovalStatus().toString()).build();
 	}
 	
 	public String activate(String token) {

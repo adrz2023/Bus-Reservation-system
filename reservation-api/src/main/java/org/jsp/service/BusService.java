@@ -11,6 +11,7 @@ import org.jsp.dto.BusResponse;
 import org.jsp.dto.ResponseStructure;
 import org.jsp.model.Vendor;
 import org.jsp.model.Bus;
+import org.jsp.util.ApprovalStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequ
 	if(optional.isPresent()) {
 		Vendor ad=optional.get();
 
-		if(!"APPROVED".equalsIgnoreCase(ad.getApprovalStatus())){
+		if(ad.getApprovalStatus() != ApprovalStatus.APPROVED){
 			structure.setMessege("Vendor is not approved yet");
 			structure.setStatuscode(HttpStatus.FORBIDDEN.value());
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(structure);

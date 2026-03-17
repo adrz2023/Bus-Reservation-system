@@ -1,9 +1,6 @@
 package org.jsp.controller;
 
-import org.jsp.dto.ResponseStructure;
-import org.jsp.dto.SuperAdminRequest;
-import org.jsp.dto.SuperAdminResponse;
-import org.jsp.dto.VendorResponse;
+import org.jsp.dto.*;
 import org.jsp.service.SuperAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,7 @@ public class SuperAdminController {
 
     @PostMapping
 
-    public ResponseEntity<ResponseStructure<SuperAdminResponse>> saveSuperAdmin(@RequestBody SuperAdminRequest request){
+    public ResponseEntity<ResponseStructure<SuperAdminResponse>> saveSuperAdmin(@RequestBody SuperAdminRequest request) {
         return superAdminService.saveSuperAdmin(request);
     }
 
@@ -30,10 +27,14 @@ public class SuperAdminController {
     public ResponseEntity<ResponseStructure<List<VendorResponse>>> getAllVendors() {
         return superAdminService.getAllVendors();
     }
+
     @GetMapping("/vendors/pending")
     public ResponseEntity<ResponseStructure<List<VendorResponse>>> getPendingVendors() {
         return superAdminService.getPendingVendors();
     }
 
-
+    @PutMapping("/vendor/{id}/approval-status")
+    public ResponseEntity<ResponseStructure<String>> updateApprovalStatus(@PathVariable int id, @RequestBody VendorApprovalUpdateRequest req) {
+        return superAdminService.updateApprovalStatus(id, req.getStatus());
+    }
 }

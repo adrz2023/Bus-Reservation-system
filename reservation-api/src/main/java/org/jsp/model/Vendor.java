@@ -12,7 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.jsp.util.ApprovalStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Data
@@ -39,7 +41,8 @@ private String password;
 private String token;
 @Column(nullable=false)
 private String status;
-private String approvalStatus;
+@Enumerated(EnumType.STRING)
+private ApprovalStatus approvalStatus;
 @OneToMany(mappedBy="vendor")
 private List<Bus> buses;
 
