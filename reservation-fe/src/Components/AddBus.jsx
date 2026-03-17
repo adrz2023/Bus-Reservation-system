@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../Styles/addbus.css";
 import axios from "axios";
+import "../Styles/adminTheme.css";
 
 const AddBus = () => {
     let [name, setName] = useState("");
@@ -31,8 +32,16 @@ const AddBus = () => {
     }
 
     return (
-        <div className="addbus">
-            <form action="">
+        <div className="adminFormShell">
+            <div className="adminPanel adminFormPanel">
+              <div className="adminPanelHeader">
+                <div>
+                  <h3>Add bus</h3>
+                  <p>Create a new bus listing (route, date, seats, price)</p>
+                </div>
+              </div>
+              <div className="adminPanelBody">
+            <form className="adminForm" action="">
                 <label htmlFor="">Name</label>
                 <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="enter name" />
                 <label htmlFor="">Bus Number</label>
@@ -66,8 +75,10 @@ const AddBus = () => {
                     placeholder="Add picture URL" 
                 />
 
-<button onClick={addbus} id="addbusbutton">Add Bus</button>
+<button onClick={addbus} className="adminBtn adminBtnPrimary adminFormSubmit">Add Bus</button>
             </form>
+              </div>
+            </div>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../Styles/addbus.css";
+import "../Styles/adminTheme.css";
 export default function EditBus() {
     let [name, setName] = useState("");
     let [bus_number, setBus_number] = useState("");
@@ -53,8 +54,16 @@ export default function EditBus() {
     }
 
     return (
-        <div className="addbus">
-            <form action="">
+        <div className="adminFormShell">
+            <div className="adminPanel adminFormPanel">
+              <div className="adminPanelHeader">
+                <div>
+                  <h3>Edit bus</h3>
+                  <p>Update route, date, seats and number</p>
+                </div>
+              </div>
+              <div className="adminPanelBody">
+            <form className="adminForm" action="">
                 <label htmlFor="">Name</label>
                 <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="enter name" />
                 <label htmlFor="">Bus Number</label>
@@ -67,8 +76,10 @@ export default function EditBus() {
                 <input type="text" required value={to_location} onChange={(e) => setTo_location(e.target.value)} placeholder="enter to location" />
                 <label htmlFor="">Date Of Departure</label>
                 <input type="date" required value={bus_depurture} onChange={(e) => setBus_depurture(e.target.value)} placeholder="enter date" />
-                <button onClick={editBus} id="addbusbutton">Edit Bus</button>
+                <button onClick={editBus} className="adminBtn adminBtnPrimary adminFormSubmit">Save Changes</button>
             </form>
+              </div>
+            </div>
         </div>
     );
 }

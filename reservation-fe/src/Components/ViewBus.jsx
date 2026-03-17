@@ -80,32 +80,41 @@ function editNavigate(id){
 }
 
     return (
-        <div className="viewBus">
+        <div className="adminBusList">
             {Array.isArray(bus) && bus.length > 0 ? (
                 bus.map((item) => (
-                    <div className="bus_details" key={item.bus_number}>
+                    <div className="adminBusRow" key={item.bus_number}>
+                        <div className="adminBusThumb">
+                            <img src={item.imageUrl} alt={item.name} />
+                        </div>
 
-                        <img src={item.imageUrl} alt={item.name} />
+                        <div className="adminBusMain">
+                            <div className="adminBusTop">
+                                <div className="adminBusName">{item.name}</div>
+                                <div className="adminBusPrice">₹ {item.costPerSeat} <span>/seat</span></div>
+                            </div>
 
-                        <h4>{item.name}</h4>
-                        
-                        <p>From: {item.from_location} <br></br> To: {item.to_location}</p>
-                        
-                        <i>Seats: {item.seats}</i>
-                        <p>Price ₹ {item.costPerSeat} </p>
-                        <p>Date: {item.bus_depurture}</p>
-                        <span>Bus Number: {item.bus_number}</span>
-                        <span>Bus Description:{item.description}</span>
-                        
+                            <div className="adminBusRoute">
+                                {item.from_location} <span>→</span> {item.to_location}
+                            </div>
 
-                        <button onClick={()=>{editNavigate(item.id)}}>Edit</button>
-                        <button onClick={()=>{removedBus(item.id,item.bus_number)}}>Delete</button>
+                            <div className="adminBusMeta">
+                                <span><strong>Date:</strong> {item.bus_depurture}</span>
+                                <span><strong>Seats:</strong> {item.seats}</span>
+                                <span><strong>Bus #:</strong> {item.bus_number}</span>
+                                <span><strong>Type:</strong> {item.description}</span>
+                            </div>
+                        </div>
+
+                        <div className="adminBusActions">
+                            <button className="adminBtn adminBtnGhost" onClick={() => { editNavigate(item.id) }}>Edit</button>
+                            <button className="adminBtn adminBtnPrimary" onClick={() => { removedBus(item.id, item.bus_number) }}>Delete</button>
+                        </div>
                     </div>
                 ))
             ) : (
-                <p>No buses available</p>
-            )
-            }
+                <div className="adminEmpty">No buses available</div>
+            )}
         </div>
     );
 }
