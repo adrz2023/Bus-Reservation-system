@@ -1,0 +1,49 @@
+package org.befikreyatra.model;
+
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.befikreyatra.util.ApprovalStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
+@Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Vendor {
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+
+private int id;
+@Column(nullable=false)
+private String name;
+@Column(nullable=false,unique=true)
+private long phone;
+@Column(unique=true,nullable=false)
+private String gst_number;
+@Column(nullable=false)
+private String travels_name;
+@Column(nullable=false,unique=true)
+private String email;
+@Column(nullable=false)
+private String password;
+private String token;
+@Column(nullable=false)
+private String status;
+@Enumerated(EnumType.STRING)
+private ApprovalStatus approvalStatus;
+@OneToMany(mappedBy="vendor")
+private List<Bus> buses;
+
+}
