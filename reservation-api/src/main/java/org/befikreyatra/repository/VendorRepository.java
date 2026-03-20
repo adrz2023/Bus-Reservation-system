@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.befikreyatra.model.Vendor;
 
+import org.befikreyatra.util.ApprovalStatus;
 import org.springframework.data.repository.CrudRepository;
 
 public interface VendorRepository extends CrudRepository<Vendor, Integer> {
@@ -18,5 +19,5 @@ public interface VendorRepository extends CrudRepository<Vendor, Integer> {
 
 	List<Vendor> findByApprovalStatus(String approvalStatus);
 
-	long countByApprovalStatus ( String approvalStatus);
+	long countByApprovalStatus ( ApprovalStatus approvalStatus);
 }

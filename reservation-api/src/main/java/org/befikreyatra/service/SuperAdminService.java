@@ -2,18 +2,19 @@ package org.befikreyatra.service;
 
 import org.befikreyatra.dao.SuperAdminDao;
 import org.befikreyatra.dao.VendorDao;
-import org.befikreyatra.dto.ResponseStructure;
-import org.befikreyatra.dto.SuperAdminRequest;
-import org.befikreyatra.dto.SuperAdminResponse;
-import org.befikreyatra.dto.VendorResponse;
+import org.befikreyatra.dto.*;
 import org.befikreyatra.model.SuperAdmin;
 import org.befikreyatra.model.Vendor;
+import org.befikreyatra.repository.TicketRepository;
+import org.befikreyatra.repository.UserRepository;
+import org.befikreyatra.repository.VendorRepository;
 import org.befikreyatra.util.ApprovalStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,15 @@ public class SuperAdminService {
 
     @Autowired
     private VendorDao vendorDao;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private VendorRepository vendorRepository;
 
     public ResponseEntity<ResponseStructure<SuperAdminResponse>> saveSuperAdmin(SuperAdminRequest request) {
 
@@ -101,9 +111,76 @@ public class SuperAdminService {
     }
 
 
+    public ResponseEntity<ResponseStructure<SuperAdminKpiResponse>> getDashboardKpis(){
+        ResponseStructure<SuperAdminKpiResponse> structure= new ResponseStructure<>();
+        LocalDate from7Days = LocalDate.now().minusDays(7);
+
+        long totalUsers = userRepository.totalUsers();
+//        long newUsers7 = userRepository.usersFrom(from7Days); // requires createdAt-like field
+
+        long totalTickets = ticketRepository.totalTickets();
+        long tickets7 = ticketRepository.ticketsFrom(from7Days);
+
+        double totalRevenue = ticketRepository.totalRevenue();
+        double revenue7 = ticketRepository.revenueFrom(from7Days);
+
+        long cancelledTotal = ticketRepository.cancelledTickets();
+
+        double cancellationRate = totalTickets == 0 ? 0.0 : (cancelledTotal * 100.0) / totalTickets;
+
+        long vendorsTotal = (long) vendorDao.findAll().spliterator().getExactSizeIfKnown(); // or vendorRepository.count()
+        long approved = vendorRepository.countByApprovalStatus(ApprovalStatus.APPROVED);
+        long rejected = vendorRepository.countByApprovalStatus(ApprovalStatus.REJECT);
+        long underScreening = vendorRepository.countByApprovalStatus(ApprovalStatus.UNDER_SCREENING);
+        long documentReview = vendorRepository.countByApprovalStatus(ApprovalStatus.DOCUMENT_REVIEW);
+
+        SuperAdminKpiResponse kpi = mapToKpiResponse(
+                totalUsers , totalTickets, tickets7,
+                totalRevenue, revenue7, cancelledTotal, cancellationRate,
+                vendorsTotal, approved, rejected, underScreening, documentReview
+        );
+
+        structure.setData(kpi);
+        structure.setMessege("Super admin KPIs");
+        structure.setStatuscode(HttpStatus.OK.value());
+
+        return ResponseEntity.ok(structure);
+    }
+
     private VendorResponse mapToAdminResponse(Vendor admin) {
         return VendorResponse.builder().name(admin.getName()).email(admin.getEmail()).id(admin.getId())
                 .gst_number(admin.getGst_number()).phone(admin.getPhone()).travels_name(admin.getTravels_name())
                 .password(admin.getPassword()).approvalStatus(admin.getApprovalStatus().toString()).build();
+    }
+
+
+    private SuperAdminKpiResponse mapToKpiResponse(
+            long totalUsers,
+            long totalTickets,
+            long tickets7,
+            double totalRevenue,
+            double revenue7,
+            long cancelledTotal,
+            double cancellationRate,
+            long vendorsTotal,
+            long approved,
+            long rejected,
+            long underScreening,
+            long documentReview) {
+
+        return SuperAdminKpiResponse.builder()
+                .totalUsers(totalUsers)
+                .totalTickets(totalTickets)
+                .ticketsLast7Days(tickets7)
+                .totalRevenue(totalRevenue)
+                .revenueLast7Days(revenue7)
+                .cancelledTickets(cancelledTotal)
+                .cancellationRate(cancellationRate)
+                .vendorsTotal(vendorsTotal)
+                .vendorsApproved(approved)
+                .vendorsRejected(rejected)
+                .vendorsUnderScreening(underScreening)
+                .vendorsDocumentReview(documentReview)
+                .build();
     }
 }

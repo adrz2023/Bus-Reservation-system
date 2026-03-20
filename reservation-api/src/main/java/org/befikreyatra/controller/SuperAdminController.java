@@ -37,4 +37,9 @@ public class SuperAdminController {
     public ResponseEntity<ResponseStructure<String>> updateApprovalStatus(@PathVariable int id, @RequestBody VendorApprovalUpdateRequest req) {
         return superAdminService.updateApprovalStatus(id, req.getStatus());
     }
+
+    @GetMapping("/dashboardkpis")
+    public ResponseEntity<ResponseStructure<SuperAdminKpiResponse>>  getKpis(){
+        return superAdminService.getDashboardKpis();
+    }
 }
