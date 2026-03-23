@@ -14,6 +14,7 @@ import Userlogin from './Components/Userlogin';
 import UserSignUp from './Components/UserSignUp';
 import Userhomepage from './Components/Userhomepage';
 import UserBookings from './Components/UserBookings';
+import SuperAdminHomePage from './Components/SuperAdminHomePage';
 function App() {
   return (
     <div className="App">
@@ -29,6 +30,7 @@ function App() {
           <Route path='/userlogin' element={<Userlogin />} />
           <Route path='/userhomepage' element={<Userhomepage />} />
           <Route path='/userbookings' element={<UserBookings />} />
+          <Route path='/superadminhomepage' element={<SuperAdminHomePage />} />
         </Routes>
       </BrowserRouter>
     </div>
