@@ -12,10 +12,10 @@ public interface BusRepository  extends JpaRepository<Bus, Integer>{
 	List<Bus> findBusesByVendorId(int id);
 	
 	
-    @Query("select b from Bus b where b.from_location=?1 and b.to_location=?2 and b.bus_depurture=?3")
-	List<Bus>FindBuses (String from_location,String to_location,LocalDate bus_depurture);
-		
-	
-	
+//    @Query("select b from Bus b where b.from_location=?1 and b.to_location=?2 and b.bus_depurture=?3")
+//	List<Bus>FindBuses (String from_location,String to_location,LocalDate bus_depurture);
+//
+//
+//
 	
 }
