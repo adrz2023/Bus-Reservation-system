@@ -1,0 +1,190 @@
+.saShell{
+  min-height:100vh;width:100vw;display:grid;
+  grid-template-columns:260px 1fr;background:#0b1220;color:#e5e7eb;
+}
+.saSidebar{
+  position:sticky;top:0;height:100vh;padding:18px 14px;
+  background:linear-gradient(180deg,#0b1220,#070b14);
+  border-right:1px solid rgba(255,255,255,.06);
+  display:flex;flex-direction:column;gap:16px;
+}
+.saBrand{padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.saLogo{font-weight:900}
+.saTag{margin-top:6px;font-size:12px;color:rgba(229,231,235,.72)}
+
+.saNav{display:grid;gap:8px}
+.saNavItem{
+  text-decoration:none;color:rgba(229,231,235,.86);
+  padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.03)
+}
+.saNavItem:hover{background:rgba(255,255,255,.06)}
+.saNavItem.active{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:#fff}
+
+.saSidebarFooter{margin-top:auto}
+.saHint{font-size:12px;line-height:1.45;color:rgba(229,231,235,.72);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03)}
+
+.saMain{display:grid;grid-template-rows:auto 1fr;min-width:0}
+.saTopbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 18px;background:rgba(11,18,32,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.saTopTitle{font-weight:900}
+.saTopSub{font-size:12px;color:rgba(229,231,235,.65)}
+.saChip{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:8px 10px;border-radius:999px;font-size:13px}
+
+.saContent{padding:18px;min-width:0}
+.saGrid{display:grid;gap:14px}
+
+.saPanel{
+  border-radius:18px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 18px 60px rgba(0,0,0,.32);
+}
+.saPanelHead{
+  padding:16px;border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+}
+.saPanelHead h3{margin:0;font-size:16px}
+.saPanelHead p{margin:6px 0 0;font-size:12px;color:rgba(229,231,235,.7)}
+
+.saBtn{border:none;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
+.saBtnGhost{background:rgba(255,255,255,.06);color:rgba(229,231,235,.92);border:1px solid rgba(255,255,255,.08)}
+.saBtnGhost:hover{background:rgba(255,255,255,.10)}
+
+.saKpiGrid{padding:14px 16px 16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.saKpiCard{border-radius:16px;padding:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.saKpiLabel{font-size:12px;color:rgba(229,231,235,.72)}
+.saKpiValue{margin-top:6px;font-size:22px;font-weight:900;color:#fff}
+
+.saTabs{display:inline-flex;gap:8px}
+.saTabs button{
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);
+  color:rgba(229,231,235,.86);border-radius:999px;padding:8px 10px;cursor:pointer;font-weight:700;font-size:12px
+}
+.saTabs button.active{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10);color:#fff}
+
+.saTableWrap{padding:10px 16px 16px;overflow:auto}
+.saTable{width:100%;border-collapse:collapse}
+.saTable th,.saTable td{padding:12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+.saTable th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:rgba(229,231,235,.6);text-align:left}
+.saCellTitle{font-weight:800;color:#fff}
+.saCellSub{font-size:12px;color:rgba(229,231,235,.65);margin-top:2px}
+
+.saSelect{
+  border-radius:12px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);color:rgba(229,231,235,.92);
+  padding:8px 10px;outline:none
+}
+.saRowActions{display:flex;align-items:center;gap:10px}
+.saSaving{font-size:12px;color:rgba(229,231,235,.6)}
+
+.saStatus{
+  display:inline-flex;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;
+  border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06)
+}
+.saError{padding:14px 16px;color:#fecaca;background:#3f1d1d;border-top:1px solid rgba(255,255,255,.06)}
+.saEmpty{padding:14px 16px;color:rgba(229,231,235,.7)}
+
+@media (max-width: 980px){
+  .saShell{grid-template-columns:1fr}
+  .saSidebar{position:relative;height:auto}
+  .saKpiGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 520px){
+  .saKpiGrid{grid-template-columns:1fr}
+}
+.saActionWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.saStatusPill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+}
+
+.saStatusPill.approved {
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.saStatusPill.reject {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.saStatusPill.document_review {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.saStatusPill.under_screening {
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.35);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.saActionBtn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.saActionBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.saActionMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 210px;
+  border-radius: 12px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.saActionItem {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  padding: 10px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.saActionItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.saActionItem.active {
+  background: rgba(59, 130, 246, 0.25);
+  color: #dbeafe;
+  font-weight: 800;
+}
