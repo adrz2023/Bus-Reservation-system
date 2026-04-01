@@ -31,4 +31,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query("select count(t) from Ticket t where t.status = 'CANCELLED' and t.dateOfBooking >= ?1")
     long cancelledTicketsFrom(LocalDate fromDate);
 
+    @Query("select count(t)>0 from Ticket t where t.user.id=?1 and t.bus.id=?2 and t.status='EXPIRED'")
+    boolean hasExpiredTicketForBus(int userId, int busId);
 }
