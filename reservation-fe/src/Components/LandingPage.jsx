@@ -32,7 +32,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/LandingPage.css";
-import BookBus from "./BookBus";
+// Booking now happens on a dedicated page: /book/:tripId
 
 const API_BASE = "http://localhost:8080";
 
@@ -68,9 +68,6 @@ export default function LandingPage() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login"); // 'login' | 'register'
 
-  const [bookingPopup, setBookingPopup] = useState(false);
-  const [selectedTrip, setSelectedTrip] = useState(null);
-  const [bookKey, setBookKey] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   // login form state
@@ -154,9 +151,7 @@ export default function LandingPage() {
       setAuthModalOpen(true);
       return;
     }
-    setSelectedTrip(trip);
-    setBookKey((k) => k + 1); // forces remount so popup can be reopened cleanly
-    setBookingPopup(true);
+    navigate(`/book/${trip.id}`, { state: { trip } });
   };
 
   const openLoginModal = () => {
@@ -487,10 +482,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {bookingPopup && selectedTrip && (
-        <BookBus key={bookKey} trip={selectedTrip} bookingPopup={bookingPopup} />
-      )}
 
       {authModalOpen && (
         <div className="lpAuthBackdrop" onClick={() => setAuthModalOpen(false)}>

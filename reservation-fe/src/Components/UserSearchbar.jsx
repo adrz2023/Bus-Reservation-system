@@ -1,19 +1,18 @@
 import axios from "axios";
 import { useState } from "react";
 import '../Styles/UserSearchbar.css'
-import BookBus from "./BookBus";
+import { useNavigate } from "react-router-dom";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
    export default function UserSearchbar(){
+   const navigate = useNavigate();
    let [from_location,setFrom_loaction]=useState("")
    let [to_location,setTo_locaton]=useState("")
    let[departureDate,setDepartureDate]=useState("") 
    let[trips,setTrips]=useState([]);
-   let[bookingPopup,setBookingPopup]=useState(false)
-    let[selectedTrip,setSelectedTrip]=useState(null)
 
     const from_location_options = [
         { label: 'kolkata' },
@@ -90,9 +89,19 @@ import Button from '@mui/material/Button';
 
 
    function bookTrip(trip) {
-    setBookingPopup(true)
-    setSelectedTrip(trip)
-}
+    const userId = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("userId") || "null");
+      } catch {
+        return null;
+      }
+    })();
+    if (!userId) {
+      alert("Please login to book.");
+      return;
+    }
+    navigate(`/book/${trip.id}`, { state: { trip } });
+  }
 
 function handleSetFromLocation(e) {
     setFrom_loaction(e.target.value)
@@ -202,7 +211,6 @@ return(
       })}
 
       {/* <h1>Bus Booking Discount Offers</h1> */}
-      {bookingPopup && selectedTrip && <BookBus trip={selectedTrip} bookingPopup={bookingPopup} /> }
             
     </div>
   )

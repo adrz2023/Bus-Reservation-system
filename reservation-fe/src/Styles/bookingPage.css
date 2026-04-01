@@ -1,0 +1,277 @@
+/* White-ish booking page theme */
+.bkRoot {
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #0f172a;
+  width: 100vw;
+  text-align: left; /* override global .App { text-align:center } */
+}
+
+/* Ensure landing navbar spans full width on booking page */
+.bkRoot .lpNav {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bkTop {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(246, 247, 251, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.bkBack {
+  display: inline-block;
+  text-decoration: none;
+  color: rgba(15, 23, 42, 0.75);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.bkBack:hover {
+  color: rgba(15, 23, 42, 0.95);
+}
+
+.bkTitle h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+}
+
+.bkTitle p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.66);
+}
+
+.bkChip {
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 12px;
+  background: #ffffff;
+}
+
+.bkLoginHint {
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.bkMain {
+  padding: 18px;
+}
+
+.bkGrid {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.bkCard {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+}
+
+.bkCard h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.bkMuted {
+  color: rgba(15, 23, 42, 0.62);
+  font-size: 13px;
+}
+
+.bkError {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: rgba(153, 27, 27, 0.95);
+}
+
+.bkSummaryTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.bkBusName {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.bkPrice {
+  font-weight: 900;
+}
+
+.bkPrice span {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.55);
+  margin-left: 4px;
+}
+
+.bkRoute {
+  margin-top: 8px;
+  font-weight: 800;
+  color: rgba(15, 23, 42, 0.9);
+}
+
+.bkRoute span {
+  color: #ef4444;
+}
+
+.bkMeta {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.68);
+}
+
+.bkImg {
+  margin-top: 12px;
+}
+
+.bkImg img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+
+.bkForm {
+  display: grid;
+  gap: 12px;
+}
+
+.bkCheck {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.8);
+}
+
+.bkRow {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.bkPassenger {
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.bkPassengerHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.bkLink {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.bkPassengerGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr 0.8fr;
+  gap: 10px;
+}
+
+.bkPassengerGrid label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.bkPassengerGrid input,
+.bkPassengerGrid select {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  padding: 10px 12px;
+  outline: none;
+}
+
+.bkPassengerGrid input:focus,
+.bkPassengerGrid select:focus {
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+}
+
+.bkTotal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.bkBig {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.bkActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bkBtn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.bkBtnPrimary {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.bkBtnGhost {
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+@media (max-width: 980px) {
+  .bkGrid {
+    grid-template-columns: 1fr;
+  }
+  .bkPassengerGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
