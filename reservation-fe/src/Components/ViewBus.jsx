@@ -78,7 +78,6 @@ let navigate=useNavigate()
 function editNavigate(id){
     navigate(`/adminhomepage/editbus/${id}`)
 }
-
     return (
         <div className="adminBusList">
             {Array.isArray(bus) && bus.length > 0 ? (
@@ -91,15 +90,9 @@ function editNavigate(id){
                         <div className="adminBusMain">
                             <div className="adminBusTop">
                                 <div className="adminBusName">{item.name}</div>
-                                <div className="adminBusPrice">₹ {item.costPerSeat} <span>/seat</span></div>
-                            </div>
-
-                            <div className="adminBusRoute">
-                                {item.from_location} <span>→</span> {item.to_location}
                             </div>
 
                             <div className="adminBusMeta">
-                                <span><strong>Date:</strong> {item.bus_depurture}</span>
                                 <span><strong>Seats:</strong> {item.seats}</span>
                                 <span><strong>Bus #:</strong> {item.bus_number}</span>
                                 <span><strong>Type:</strong> {item.description}</span>

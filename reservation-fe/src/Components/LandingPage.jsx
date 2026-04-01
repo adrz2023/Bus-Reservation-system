@@ -59,7 +59,7 @@ export default function LandingPage() {
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
 
-  const [buses, setBuses] = useState([]);
+  const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -69,7 +69,7 @@ export default function LandingPage() {
   const [authMode, setAuthMode] = useState("login"); // 'login' | 'register'
 
   const [bookingPopup, setBookingPopup] = useState(false);
-  const [selectedBusId, setSelectedBusId] = useState(null);
+  const [selectedTrip, setSelectedTrip] = useState(null);
   const [bookKey, setBookKey] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -97,42 +97,43 @@ export default function LandingPage() {
     navigate("/");
   };
 
-  const fetchAllBuses = async () => {
+  const fetchAllTrips = async () => {
     setLoading(true);
     setErrorMsg("");
     try {
-      const res = await axios.get(`${API_BASE}/api/bus`);
-      setBuses(Array.isArray(res?.data?.data) ? res.data.data : []);
+      // Optional params should return all trips when omitted
+      const res = await axios.get(`${API_BASE}/api/trip/search`);
+      setTrips(Array.isArray(res?.data?.data) ? res.data.data : []);
     } catch (e) {
-      setErrorMsg("Could not load buses. Is the backend running on :8080?");
-      setBuses([]);
+      setErrorMsg("Could not load trips. Is the backend running on :8080?");
+      setTrips([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAllBuses();
+    fetchAllTrips();
   }, []);
 
-  const searchBuses = async (e) => {
+  const searchTrips = async (e) => {
     e.preventDefault();
     setHasSearched(true);
     setLoading(true);
     setErrorMsg("");
 
     try {
-      const res = await axios.get(`${API_BASE}/api/bus/find`, {
+      const res = await axios.get(`${API_BASE}/api/trip/search`, {
         params: {
           from_location: from.trim(),
           to_location: to.trim(),
-          bus_depurture: date,
+          departureDate: date,
         },
       });
-      setBuses(Array.isArray(res?.data?.data) ? res.data.data : []);
+      setTrips(Array.isArray(res?.data?.data) ? res.data.data : []);
     } catch (e2) {
-      setErrorMsg("No buses found for this route/date (or server error).");
-      setBuses([]);
+      setErrorMsg("No trips found for this route/date (or server error).");
+      setTrips([]);
     } finally {
       setLoading(false);
     }
@@ -143,17 +144,17 @@ export default function LandingPage() {
     setTo("");
     setDate("");
     setHasSearched(false);
-    fetchAllBuses();
+    fetchAllTrips();
   };
 
-  const handleBook = (busId) => {
+  const handleBook = (trip) => {
     if (!userId) {
       setAuthMode("login");
       setAuthError("");
       setAuthModalOpen(true);
       return;
     }
-    setSelectedBusId(busId);
+    setSelectedTrip(trip);
     setBookKey((k) => k + 1); // forces remount so popup can be reopened cleanly
     setBookingPopup(true);
   };
@@ -303,7 +304,7 @@ export default function LandingPage() {
             Compare routes & prices, and book instantly with live availability, secure payments, and trusted operators for a smooth, comfortable travel experience.
           </p>
 
-          <form className="lpSearch" onSubmit={searchBuses}>
+              <form className="lpSearch" onSubmit={searchTrips}>
             <input
               value={from}
               onChange={(e) => setFrom(e.target.value)}
@@ -338,33 +339,33 @@ export default function LandingPage() {
 
       <main className="lpMain">
         <div className="lpSectionHead">
-          <h2>{hasSearched ? "Search results" : "Available buses"}</h2>
+          <h2>{hasSearched ? "Search results" : "Available trips"}</h2>
           {hasSearched && (
             <button className="lpLinkBtn" onClick={clearSearch}>Clear search</button>
           )}
         </div>
 
         {loading ? (
-          <div className="lpEmpty">Loading buses…</div>
+          <div className="lpEmpty">Loading trips…</div>
         ) : errorMsg ? (
           <div className="lpEmpty lpError">{errorMsg}</div>
-        ) : buses.length === 0 ? (
+        ) : trips.length === 0 ? (
           <div className="lpEmpty">
-            No buses to show.
+            No trips to show.
             <div style={{ marginTop: 10 }}>
-              <button className="lpBtn lpBtnGhost" onClick={fetchAllBuses}>Reload</button>
+              <button className="lpBtn lpBtnGhost" onClick={fetchAllTrips}>Reload</button>
             </div>
           </div>
         ) : (
           <div className="lpGrid">
-            {buses.map((bus) => {
-              const key = bus.id ?? bus.bus_number ?? `${bus.name}-${bus.from_location}-${bus.to_location}`;
+            {trips.map((trip) => {
+              const key = trip.id ?? `${trip.busId}-${trip.from_location}-${trip.to_location}-${trip.departureDate}`;
 
               return (
                 <article className="busCard" key={key}>
                   <div className="busCardImg">
-                    {bus.imageUrl ? (
-                      <img src={bus.imageUrl} alt={bus.name || "Bus"} />
+                    {trip.imageUrl ? (
+                      <img src={trip.imageUrl} alt={trip.busName || "Bus"} />
                     ) : (
                       <div className="busImgFallback">No Image</div>
                     )}
@@ -372,25 +373,25 @@ export default function LandingPage() {
 
                   <div className="busCardBody">
                     <div className="busCardTop">
-                      <h3 className="busName">{bus.name || "Bus"}</h3>
+                      <h3 className="busName">{trip.busName || "Bus"}</h3>
                       <div className="busPrice">
-                        ₹{bus.costPerSeat ?? "--"}
+                        ₹{trip.costPerSeat ?? "--"}
                         <span>/seat</span>
                       </div>
                     </div>
 
                     <div className="busRoute">
-                      {bus.from_location} <span className="busArrow">→</span> {bus.to_location}
+                      {trip.from_location} <span className="busArrow">→</span> {trip.to_location}
                     </div>
 
                     <div className="busMeta">
-                      <span><strong>Date:</strong> {bus.bus_depurture}</span>
-                      <span><strong>Seats:</strong> {bus.availableSeats ?? bus.seats ?? "--"}</span>
-                      <span><strong>Bus #:</strong> {bus.bus_number ?? "--"}</span>
+                      <span><strong>Date:</strong> {trip.departureDate}</span>
+                      <span><strong>Seats:</strong> {trip.availableSeats ?? "--"}</span>
+                      <span><strong>Bus #:</strong> {trip.busNumber ?? "--"}</span>
                     </div>
 
                     <div className="busActions">
-                      <button className="lpBtn" onClick={() => handleBook(bus.id)}>Book</button>
+                      <button className="lpBtn" onClick={() => handleBook(trip)}>Book</button>
                       {!userId && <span className="busHint">Login/Register required to confirm booking</span>}
                     </div>
                   </div>
@@ -487,8 +488,8 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {bookingPopup && selectedBusId && (
-        <BookBus key={bookKey} id={selectedBusId} bookingPopup={bookingPopup} />
+      {bookingPopup && selectedTrip && (
+        <BookBus key={bookKey} trip={selectedTrip} bookingPopup={bookingPopup} />
       )}
 
       {authModalOpen && (

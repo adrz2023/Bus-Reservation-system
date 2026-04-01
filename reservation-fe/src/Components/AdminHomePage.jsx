@@ -4,6 +4,8 @@ import AdminDashbord from "./AdminDashboard";
 import ViewBus from "./ViewBus";
 import AddBus from "./AddBus";
 import EditBus from "./EditBus";
+import ManageTrips from "./ManageTrips";
+import Trips from "./Trips";
 import "../Styles/adminTheme.css";
 
 const AdminHomePage = () => {
@@ -27,6 +29,12 @@ const AdminHomePage = () => {
           <NavLink to="/adminhomepage/addbus" className={({ isActive }) => `adminNavItem ${isActive ? "active" : ""}`}>
             Add Bus
           </NavLink>
+          <NavLink to="/adminhomepage/trips" className={({ isActive }) => `adminNavItem ${isActive ? "active" : ""}`}>
+            Trips
+          </NavLink>
+           <NavLink to="/adminhomepage/addtrips" className={({ isActive }) => `adminNavItem ${isActive ? "active" : ""}`}>
+            Add Trips
+          </NavLink>
         </nav>
 
         <div className="adminSidebarFooter">
@@ -44,6 +52,9 @@ const AdminHomePage = () => {
             <Route path="/vewbus" element={<ViewBus />} />
             <Route path="/addbus" element={<AddBus />} />
             <Route path="/editbus/:id" element={<EditBus />} />
+            <Route path="/trips" element={<Trips />} />
+            <Route path="/addtrips" element={<ManageTrips />} />
+            <Route path="/bus/:busId/trips" element={<ManageTrips />} />
           </Routes>
         </div>
       </div>

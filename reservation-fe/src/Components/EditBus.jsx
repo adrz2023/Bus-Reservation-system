@@ -7,9 +7,8 @@ export default function EditBus() {
     let [name, setName] = useState("");
     let [bus_number, setBus_number] = useState("");
     let [seats, setNumber_of_seats] = useState("");
-    let [from_location, setFrom_location] = useState("");
-    let [to_location, setTo_location] = useState("");
-    let [bus_depurture, setBus_depurture] = useState("");
+    let [description, setDescription] = useState("");
+    let [imageUrl, setImageUrl] = useState("");
 
     let param = useParams();
 
@@ -21,9 +20,8 @@ export default function EditBus() {
                 setName(data.name);
                 setBus_number(data.bus_number);
                 setNumber_of_seats(data.seats);
-                setFrom_location(data.from_location);
-                setTo_location(data.to_location);
-                setBus_depurture(data.bus_depurture);
+                setDescription(data.description || "");
+                setImageUrl(data.imageUrl || "");
             })
             .catch((err) => {
                 console.error(err);
@@ -35,9 +33,8 @@ export default function EditBus() {
         name,
         bus_number,
         seats,
-        from_location,
-        to_location,
-        bus_depurture
+        description,
+        imageUrl
     };
 
     function editBus(e) {
@@ -59,7 +56,7 @@ export default function EditBus() {
               <div className="adminPanelHeader">
                 <div>
                   <h3>Edit bus</h3>
-                  <p>Update route, date, seats and number</p>
+                  <p>Update bus inventory. Trips (route/date/price) are managed separately.</p>
                 </div>
               </div>
               <div className="adminPanelBody">
@@ -70,12 +67,14 @@ export default function EditBus() {
                 <input type="text" required value={bus_number} onChange={(e) => setBus_number(e.target.value)} placeholder="enter bus number" />
                 <label htmlFor="">Number Of Seats</label>
                 <input type="text" required value={seats} onChange={(e) => setNumber_of_seats(e.target.value)} placeholder="enter number of seats" />
-                <label htmlFor="">From Location</label>
-                <input type="text" required value={from_location} onChange={(e) => setFrom_location(e.target.value)} placeholder="enter from location" />
-                <label htmlFor="">To Location</label>
-                <input type="text" required value={to_location} onChange={(e) => setTo_location(e.target.value)} placeholder="enter to location" />
-                <label htmlFor="">Date Of Departure</label>
-                <input type="date" required value={bus_depurture} onChange={(e) => setBus_depurture(e.target.value)} placeholder="enter date" />
+                <label>Description</label>
+                <select required value={description} onChange={(e) => setDescription(e.target.value)}>
+                  <option value="" disabled>Select type</option>
+                  <option value="AC">AC</option>
+                  <option value="NON-AC">NON-AC</option>
+                </select>
+                <label>Image URL</label>
+                <input type="url" required value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Add picture URL" />
                 <button onClick={editBus} className="adminBtn adminBtnPrimary adminFormSubmit">Save Changes</button>
             </form>
               </div>
