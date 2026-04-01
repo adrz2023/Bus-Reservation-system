@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("api/trip")
 public class TripController {
@@ -25,5 +26,14 @@ public class TripController {
     @GetMapping("/bus/{busId}")
     public ResponseEntity<ResponseStructure<List<TripResponse>>> getTripsByBus(@PathVariable int busId) {
         return tripService.getTripByBus(busId);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseStructure<List<TripResponse>>> searchTrips(
+            @RequestParam(required = false) String from_location,
+            @RequestParam(required = false) String to_location,
+            @RequestParam(required = false) LocalDate departureDate
+    ) {
+        return tripService.searchTrips(from_location, to_location, departureDate);
     }
 }

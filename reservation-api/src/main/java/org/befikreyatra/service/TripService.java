@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 @Service
 public class TripService {
 
@@ -87,5 +88,25 @@ public class TripService {
 
             return ResponseEntity.ok(structure);
 
+    }
+
+    public ResponseEntity<ResponseStructure<List<TripResponse>>> searchTrips(String from_location,
+                                                                             String to_location,
+                                                                             LocalDate departureDate) {
+        String from = (from_location == null || from_location.isBlank()) ? null : from_location.trim().toLowerCase();
+        String to = (to_location == null || to_location.isBlank()) ? null : to_location.trim().toLowerCase();
+
+        List<Trip> trips = tripDao.searchTrips(from, to, departureDate);
+
+        List<TripResponse> data = new ArrayList<>();
+        for (Trip t : trips) {
+            data.add(mapToTripResponse(t));
+        }
+        ResponseStructure<List<TripResponse>> structure = new ResponseStructure<>();
+
+        structure.setData(data);
+        structure.setMessege("Trips fetched");
+        structure.setStatuscode(HttpStatus.OK.value());
+        return ResponseEntity.ok(structure);
     }
 }
