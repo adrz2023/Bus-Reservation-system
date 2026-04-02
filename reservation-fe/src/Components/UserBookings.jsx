@@ -8,7 +8,7 @@ const UserBookings = () => {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [loading, setLoading] = useState(true);
 
-    const tabs = ["Upcoming", "Past", "Cancelled", "Unsuccessful"];
+    const tabs = ["Upcoming", "Past", "Cancelled"];
 
     useEffect(() => {
         const fetchTickets = async () => {
@@ -39,17 +39,24 @@ const UserBookings = () => {
         today.setHours(0, 0, 0, 0);
 
         return tickets.filter(ticket => {
-            if (activeTab === "Cancelled") return ticket.status === "Cancelled";
-            if (activeTab === "Unsuccessful") return ticket.status === "Unsuccessful";
+            const status = (ticket.status || "").toUpperCase();
+            if (activeTab === "Cancelled") return status === "CANCELLED";
 
-            // Only consider non-cancelled and non-unsuccessful tickets for Upcoming/Past
-            if (ticket.status === "Cancelled" || ticket.status === "Unsuccessful") return false;
+            // Only consider non-cancelled for Upcoming/Past
+            if (status === "CANCELLED") return false;
 
-            const bookingDate = new Date(ticket.bus_depurture || ticket.dateOfBooking);
+            const rawDeparture =
+              ticket.departureDate ||
+              ticket.bus_depurture ||
+              ticket.dateOfBooking ||
+              null;
+            const bookingDate = rawDeparture ? new Date(rawDeparture) : null;
 
             if (activeTab === "Upcoming") {
+                if (!bookingDate) return true;
                 return bookingDate >= today;
             } else if (activeTab === "Past") {
+                if (!bookingDate) return false;
                 return bookingDate < today;
             }
             return true;
@@ -89,11 +96,16 @@ const UserBookings = () => {
                             <div key={ticket.id} className="ticket-card">
                                 <div className="ticket-info">
                                     <div className="ticket-route">
-                                        {ticket.from_location} &rarr; {ticket.to_location}
+                                        {(ticket.from_location || "-")} &rarr; {(ticket.to_location || "-")}
                                     </div>
                                     <div className="ticket-details">
-                                        <p><strong>Bus:</strong> {ticket.busName} (No: {ticket.bus_number})</p>
-                                        <p><strong>Departure:</strong> {new Date(ticket.bus_depurture).toLocaleDateString()}</p>
+                                        <p><strong>Bus:</strong> {ticket.busName} (No: {ticket.bus_number || ticket.busNumber})</p>
+                                        <p><strong>Departure:</strong> {(() => {
+                                          const raw = ticket.departureDate || ticket.bus_depurture || ticket.dateOfBooking;
+                                          if (!raw) return "-";
+                                          const d = new Date(raw);
+                                          return isNaN(d.getTime()) ? String(raw) : d.toLocaleDateString();
+                                        })()}</p>
                                         <p><strong>Seats:</strong> {ticket.numberOfSeatsBooked}</p>
                                         <p><strong>Cost:</strong> ₹{ticket.cost}</p>
                                     </div>

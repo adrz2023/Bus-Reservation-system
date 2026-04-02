@@ -7,14 +7,16 @@ import java.util.Optional;
 
 import org.befikreyatra.dao.BusDao;
 import org.befikreyatra.dao.TicketDao;
+import org.befikreyatra.dao.TripDao;
 import org.befikreyatra.dao.UserDao;
+import org.befikreyatra.dto.PassengerRequest;
 import org.befikreyatra.dto.ResponseStructure;
+import org.befikreyatra.dto.TicketBookingRequest;
 import org.befikreyatra.dto.TicketResponse;
 import org.befikreyatra.exception.AdminNotFoundException;
-import org.befikreyatra.model.Bus;
-import org.befikreyatra.model.Ticket;
-import org.befikreyatra.model.User;
+import org.befikreyatra.model.*;
 import org.befikreyatra.util.TicketStatus;
+import org.befikreyatra.util.TripStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,38 +29,73 @@ public class TicketService {
 	private UserDao userDao;
 	@Autowired
 	private TicketDao ticketDao;
+    @Autowired
+    private TripDao tripDao;
 
-	
-	public ResponseEntity<ResponseStructure<TicketResponse>>bookTicket(int useId,int busId,int numberOfSeats){
+
+	public ResponseEntity<ResponseStructure<TicketResponse>>bookTicket(int userId, TicketBookingRequest req){
 		ResponseStructure<TicketResponse> structure=new ResponseStructure<>();
-		Optional<Bus> recBus=busDao.findById(busId);
-		Optional<User> recUser=userDao.findById(useId);
-		if(recBus.isEmpty())
-			throw new AdminNotFoundException("Cannot Book Ticket as Bus is invalid");
-		if(recUser.isEmpty())
-			throw new AdminNotFoundException("Cannot book ticket as user id is invalid");
-		User dbUser=recUser.get();
-//		if(dbUser.getStatus().equals(AccountStatus.IN_ACTIVE.toString()))
-//			throw new AdminNotFoundException("Please Active Your Account, Then Book Ticket");
-		Bus dbBus=recBus.get();
-		if(dbBus.getAvailableSeats()< numberOfSeats)
-			throw new AdminNotFoundException("Insufficent Seat");
-		Ticket ticket=new Ticket();
-		ticket.setCost(numberOfSeats*dbBus.getCostPerSeat());
-		ticket.setStatus(TicketStatus.BOOKED.toString());
-		ticket.setBus(dbBus);
-		ticket.setUser(dbUser);
-		ticket.setNumberOfSeatsBooked(numberOfSeats);
-		dbBus.getBookedTickets().add(ticket);
-		dbBus.setAvailableSeats(dbBus.getAvailableSeats()-numberOfSeats);
-		userDao.saveUser(dbUser);
-		busDao.saveBus(dbBus);
-		ticket=ticketDao.saveTicket(ticket);
-		structure.setData(mapToTicketResponse(ticket, dbUser, dbBus));
-		structure.setMessege("Ticket Booking Successfull");
-		structure.setStatuscode(HttpStatus.OK.value());
-		return ResponseEntity.status(HttpStatus.OK).body(structure);
-	}
+
+        User user = userDao.findById(userId)
+                .orElseThrow(() -> new AdminNotFoundException("Invalid user"));
+        Trip trip = tripDao.findById(req.getTripId())
+                .orElseThrow(() -> new AdminNotFoundException("Invalid trip"));
+
+        if (trip.getStatus() != TripStatus.ACTIVE) {
+            throw new AdminNotFoundException("Trip is not active");
+        }
+        int extraCount = 0;
+        if (req.getExtraPassengers() != null) {
+            extraCount = req.getExtraPassengers().size();
+        }
+        int seatsBooked = extraCount;
+        if (Boolean.TRUE.equals(req.getIncludeSelf())) {
+            seatsBooked = seatsBooked + 1;
+        }
+        if (seatsBooked <= 0) {
+            throw new AdminNotFoundException("At least one passenger is required");
+        }
+        if (trip.getAvailableSeats() < seatsBooked) {
+            throw new AdminNotFoundException("Insufficient seats");
+        }
+        Ticket ticket= new Ticket();
+        ticket.setUser(user);
+        ticket.setTrip(trip);
+        ticket.setBus(trip.getBus());
+        ticket.setNumberOfSeatsBooked(seatsBooked);
+        ticket.setCost(seatsBooked * trip.getCostPerSeat());
+        ticket.setStatus(TicketStatus.BOOKED.toString());
+        List<Passenger> passengers = new ArrayList<>();
+
+        if (Boolean.TRUE.equals(req.getIncludeSelf())) {
+            Passenger self = new Passenger();
+            self.setName(user.getName());
+            self.setAge(user.getAge());
+            self.setGender(user.getGender());
+            self.setTicket(ticket);
+            passengers.add(self);
+        }
+
+        if (req.getExtraPassengers() != null) {
+            for (PassengerRequest p : req.getExtraPassengers()) {
+                Passenger group = new Passenger();
+                group.setName(p.getName());
+                group.setAge(p.getAge());
+                group.setGender(p.getGender());
+                group.setTicket(ticket);
+                passengers.add(group);
+            }
+        }
+        ticket.setPassengers(passengers);
+        trip.setAvailableSeats(trip.getAvailableSeats() - seatsBooked);
+        ticket = ticketDao.saveTicket(ticket);
+        tripDao.saveTrip(trip);
+
+        structure.setData(mapToTicketResponse(ticket, user, trip.getBus()));
+        structure.setMessege("Ticket booked successfully");
+        structure.setStatuscode(HttpStatus.OK.value());
+        return ResponseEntity.ok(structure);
+    }
 
 
 	public ResponseEntity<ResponseStructure<List<TicketResponse>>> findTicketsByUserId(int userId){
@@ -88,16 +125,13 @@ public class TicketService {
 
 	private TicketResponse mapToTicketResponse(Ticket ticket, User user, Bus bus) {
 		// TODO Auto-generated method stub
-		
+
 		TicketResponse ticketResponse=new TicketResponse();
 		 ticketResponse.setAge(user.getAge());
 		 ticketResponse.setBusName(bus.getName());
 		 ticketResponse.setBus_number(bus.getBus_number());
 		 ticketResponse.setCost(ticket.getCost());
 		 ticketResponse.setDateOfBooking(ticket.getDateOfBooking());
-		 ticketResponse.setBus_depurture(bus.getBus_depurture());
-		 ticketResponse.setFrom_location(bus.getFrom_location());
-		 ticketResponse.setTo_location(bus.getTo_location());
 		 ticketResponse.setGender(user.getGender());
 		 ticketResponse.setId(ticket.getId());
 		 ticketResponse.setNumberOfSeatsBooked(ticket.getNumberOfSeatsBooked());
@@ -105,7 +139,7 @@ public class TicketService {
 		 ticketResponse.setDescription(bus.getDescription());
 		 ticketResponse.setStatus(ticket.getStatus());
 		 ticketResponse.setUserName(user.getName());
-		 
+
 		return ticketResponse;
 	}
 

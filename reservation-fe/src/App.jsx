@@ -15,6 +15,7 @@ import UserSignUp from './Components/UserSignUp';
 import Userhomepage from './Components/Userhomepage';
 import UserBookings from './Components/UserBookings';
 import SuperAdminHomePage from './Components/SuperAdminHomePage';
+import BookingPage from './Components/BookingPage';
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path='/*' element={<ErrorPage />} />
           <Route path='/' element={<LandingPage />} />
+          <Route path='/book/:tripId' element={<BookingPage />} />
           <Route path='/adminlogin' element={<AdminLogin />} />
           <Route path='/Adminsignup' element={<AdminSignUp />} />
           <Route path='/usersignup' element={<UserSignUp />} />

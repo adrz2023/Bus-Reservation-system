@@ -1,6 +1,7 @@
 package org.befikreyatra.controller;
 
 import org.befikreyatra.dto.ResponseStructure;
+import org.befikreyatra.dto.TicketBookingRequest;
 import org.befikreyatra.dto.TicketResponse;
 import org.befikreyatra.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/ticket")
 public class TicketController {
-@Autowired
-private TicketService ticketService;
-@PostMapping("/{userId}/{busId}/{numberOfSeats}")
-public ResponseEntity<ResponseStructure< TicketResponse>> bookTicket(@PathVariable int userId,@PathVariable int busId,@PathVariable int numberOfSeats) {
-	return ticketService.bookTicket(userId, busId, numberOfSeats);
-}
-@GetMapping("/{userId}")
-	public ResponseEntity<ResponseStructure<List<TicketResponse>>> findTicket(@PathVariable int userId ){
-	return ticketService.findTicketsByUserId(userId);
-}
+    @Autowired
+    private TicketService ticketService;
+
+    @PostMapping("/trip/{userId}")
+    public ResponseEntity<ResponseStructure<TicketResponse>> bookTicket(
+            @PathVariable int userId,
+            @RequestBody TicketBookingRequest req) {
+        return ticketService.bookTicket(userId, req);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseStructure<List<TicketResponse>>> findTicket(@PathVariable int userId) {
+        return ticketService.findTicketsByUserId(userId);
+    }
 
 }

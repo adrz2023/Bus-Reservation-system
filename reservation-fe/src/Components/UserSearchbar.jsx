@@ -1,20 +1,18 @@
 import axios from "axios";
 import { useState } from "react";
 import '../Styles/UserSearchbar.css'
-import BookBus from "./BookBus";
-import UserViewBus from "./UserViewBus";
+import { useNavigate } from "react-router-dom";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
    export default function UserSearchbar(){
+   const navigate = useNavigate();
    let [from_location,setFrom_loaction]=useState("")
    let [to_location,setTo_locaton]=useState("")
-   let[bus_depurture,setBus_depurture]=useState("") 
-   let[buses,setBuses]=useState([]);
-   let[bookingPopup,setBookingPopup]=useState(false)
-    let[busId,setBusId]=useState("")
+   let[departureDate,setDepartureDate]=useState("") 
+   let[trips,setTrips]=useState([]);
 
     const from_location_options = [
         { label: 'kolkata' },
@@ -71,12 +69,18 @@ import Button from '@mui/material/Button';
 
 
    function searchBus(e){
-    console.log(from_location,to_location,bus_depurture)
     e.preventDefault();
-    axios.get(`http://localhost:8080/api/bus/find?from_location=${from_location}&to_location=${to_location}&bus_depurture=${bus_depurture}`)
+
+    // Trip-first search (optional params supported)
+    axios.get(`http://localhost:8080/api/trip/search`, {
+      params: {
+        from_location: from_location || undefined,
+        to_location: to_location || undefined,
+        departureDate: departureDate || undefined,
+      }
+    })
     .then( res=>{
-        console.log(res.data.data)
-        setBuses(res.data.data)
+        setTrips(Array.isArray(res.data.data) ? res.data.data : [])
     })
     .catch((err)=>{
         console.log(err);
@@ -84,13 +88,22 @@ import Button from '@mui/material/Button';
    }
 
 
-   function bookbus(id) {
-    setBookingPopup(!bookingPopup)
-    setBusId(id)
-}
+   function bookTrip(trip) {
+    const userId = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("userId") || "null");
+      } catch {
+        return null;
+      }
+    })();
+    if (!userId) {
+      alert("Please login to book.");
+      return;
+    }
+    navigate(`/book/${trip.id}`, { state: { trip } });
+  }
 
 function handleSetFromLocation(e) {
-    console.log(e)
     setFrom_loaction(e.target.value)
 }
 
@@ -132,13 +145,13 @@ return(
       options={to_location_options}
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="to location" />}
-      onChange={(e)=>{setTo_locaton(e.target.value)}}   
+      onChange={(_, value)=>{setTo_locaton(value?.label || "")}}   
     />
 
 
 
 
-    <input type="date" required value={bus_depurture} on onChange={(e)=>{setBus_depurture(e.target.value)}} placeholder="enter bus departure"  style={{
+    <input type="date" value={departureDate} onChange={(e)=>{setDepartureDate(e.target.value)}} placeholder="enter departure date"  style={{
             width: '20%', 
             padding: '9px', 
             margin: '10px 0', 
@@ -160,7 +173,7 @@ return(
         transition: 'background-color 0.3s'
     }}>search</button> */}
 
-<Button sx={{
+<Button type="submit" sx={{
     // color: `linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)`,
     color: 'white',
     backgroundColor: 'black',
@@ -173,28 +186,31 @@ return(
     </Stack>
 </form>
 
-{buses.length===0 && <UserViewBus/>}
+{trips.length===0 && (
+  <div style={{ textAlign: "center", marginTop: 14, color: "#555" }}>
+    Search trips by route/date to see availability.
+  </div>
+)}
 
-{buses.map((item)=>{
+{trips.map((item)=>{
         return (
             <div style={{height:'100%',width:'40%',border:'2px solid black'}}>
         <div  className="bus_list">
-             <img src={item.imageUrl} alt={item.name} style={{ width: '80%', height: '60px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }} />
-            <h4>{item.name}</h4>
-            <i>Seat:{item.seats}</i>
+             <img src={item.imageUrl} alt={item.busName} style={{ width: '80%', height: '60px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }} />
+            <h4>{item.busName}</h4>
+            <i>Available:{item.availableSeats}</i>
             <p>from:{item.from_location}</p>
             <p>to:{item.to_location}</p>
-            <p>date:{item.bus_depurture}</p>
-            <span>bus number:{item.bus_number}</span>
+            <p>date:{item.departureDate}</p>
+            <span>bus number:{item.busNumber}</span>
 
-            <button onClick={()=>{bookbus(item.id)}} >Book Bus</button>
+            <button onClick={()=>{bookTrip(item)}} >Book Trip</button>
             </div>
             </div>
         )
       })}
 
       {/* <h1>Bus Booking Discount Offers</h1> */}
-      {bookingPopup && <BookBus id={busId} bookingPopup={bookingPopup} /> }
             
     </div>
   )

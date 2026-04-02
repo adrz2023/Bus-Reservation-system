@@ -1,18 +1,13 @@
 package org.befikreyatra.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 @Data
 @Entity
@@ -35,4 +30,10 @@ public class Ticket {
 	@JoinColumn(name="user_id")
 	@JsonIgnore
 	private User user;
+	@ManyToOne
+	@JoinColumn(name = "trip_id")
+	@JsonIgnore
+	private Trip trip;
+	@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Passenger> passengers;
 }

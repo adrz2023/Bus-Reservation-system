@@ -39,7 +39,6 @@ public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequ
 		}
 		ad.getBuses().add(mapToBus(busRequest));
 		Bus bus=mapToBus(busRequest);
-		bus.setAvailableSeats(bus.getSeats());
 		bus.setVendor(ad);
 		adminDao.saveAdmin(ad);
 		structure.setMessege("bus added");
@@ -59,10 +58,7 @@ public ResponseEntity<ResponseStructure<BusResponse>> updateBus(BusRequest busRe
 		Bus dbBus=resBus.get();
 		dbBus.setName(busRequest.getName());
 		dbBus.setBus_number(busRequest.getBus_number());
-		dbBus.setFrom_location(busRequest.getFrom_location());
-		dbBus.setTo_location(busRequest.getTo_location());
 		dbBus.setSeats(busRequest.getSeats());
-		dbBus.setBus_depurture(busRequest.getBus_depurture());
 		structure.setMessege("bus updated");
 		structure.setData(mapToBusResponse(busDao.saveBus(dbBus)));
 		structure.setStatuscode(HttpStatus.ACCEPTED.value());
@@ -91,15 +87,15 @@ public ResponseEntity<ResponseStructure<List<Bus>>> findAll() {
 	return ResponseEntity.status(HttpStatus.OK).body(structure);
 }
 
-public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(String from_location, String to_location, LocalDate bus_departure) {
-	ResponseStructure<List<Bus>> structure = new ResponseStructure<>();
-	List<Bus> buses = busDao.FindBuses(from_location, to_location, bus_departure);
-		structure.setData(buses);
-	structure.setMessege("List of Buses for entered route on this Date");
-	structure.setStatuscode(HttpStatus.OK.value());
-	return ResponseEntity.status(HttpStatus.OK).body(structure);
-	
-}
+//public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(String from_location, String to_location, LocalDate bus_departure) {
+//	ResponseStructure<List<Bus>> structure = new ResponseStructure<>();
+//	List<Bus> buses = busDao.FindBuses(from_location, to_location, bus_departure);
+//		structure.setData(buses);
+//	structure.setMessege("List of Buses for entered route on this Date");
+//	structure.setStatuscode(HttpStatus.OK.value());
+//	return ResponseEntity.status(HttpStatus.OK).body(structure);
+//
+//}
 
 
 public ResponseEntity<ResponseStructure<List<Bus>>> findByAdminId(int vendor_id){
@@ -126,22 +122,16 @@ public ResponseEntity<ResponseStructure<String>> deleteById(int id){
 private  Bus mapToBus (BusRequest busRequest) {
 	return Bus.builder().
 			name(busRequest.getName()).
-			seats(busRequest.getSeats())
-			.bus_depurture(busRequest.getBus_depurture()).
+			seats(busRequest.getSeats()).
 			bus_number(busRequest.getBus_number()).
-			from_location(busRequest.getFrom_location()).
-			to_location(busRequest.getTo_location()).
 			description(busRequest.getDescription()).
-			imageUrl(busRequest.getImageUrl()).
-			costPerSeat(busRequest.getCostPerSeat())
+			imageUrl(busRequest.getImageUrl())
 			.build();
 }
 
 
 	private BusResponse mapToBusResponse(Bus bus) {
-		return BusResponse.builder().id(bus.getId()).name(bus.getName()).bus_depurture(bus.getBus_depurture()).
-				bus_number(bus.getBus_number()).from_location(bus.getFrom_location()).
-				to_location(bus.getTo_location()).availableSeats(bus.getAvailableSeats()).costPerSeat(bus.getCostPerSeat()).description(bus.getDescription()).imageUrl(bus.getImageUrl())
+		return BusResponse.builder().id(bus.getId()).name(bus.getName()).description(bus.getDescription()).imageUrl(bus.getImageUrl())
 				.build();
 	}
 

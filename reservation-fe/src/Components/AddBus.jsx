@@ -7,14 +7,11 @@ const AddBus = () => {
     let [name, setName] = useState("");
     let [bus_number, setBus_number] = useState("");
     let [seats, setNumber_of_seats] = useState("");
-    let [from_location, setFrom_location] = useState("");
-    let [to_location, setTo_location] = useState("");
-    let [bus_depurture, setBus_depurture] = useState("");
-    let[costPerSeat,setCostPerSeat]=useState("");
     let[description,setDescription]=useState("");
     let[imageUrl,setImageUrl]=useState("");
 
-    let data = { name, bus_number, seats, from_location, to_location, bus_depurture,costPerSeat,description,imageUrl };
+    // Bus is inventory now (Trip contains route/date/price)
+    let data = { name, bus_number, seats, description, imageUrl };
     let admin = JSON.parse(localStorage.getItem("Admin"))
     // console.log(admin);
     // console.log(typeof(admin));
@@ -37,7 +34,7 @@ const AddBus = () => {
               <div className="adminPanelHeader">
                 <div>
                   <h3>Add bus</h3>
-                  <p>Create a new bus listing (route, date, seats, price)</p>
+                  <p>Create a new bus inventory record. Trips (route/date/price) are managed separately.</p>
                 </div>
               </div>
               <div className="adminPanelBody">
@@ -48,14 +45,6 @@ const AddBus = () => {
                 <input type="text" required value={bus_number} onChange={(e) => setBus_number(e.target.value)} placeholder="enter bus number" />
                 <label htmlFor="">Number Of Seats</label>
                 <input type="text" required value={seats} onChange={(e) => setNumber_of_seats(e.target.value)} placeholder="enter number of seats" />
-                <label htmlFor="">From Location</label>
-                <input type="text" required value={from_location} onChange={(e) => setFrom_location(e.target.value)} placeholder="enter from location" />
-                <label htmlFor="">To Location</label>
-                <input type="text" required value={to_location} onChange={(e) => setTo_location(e.target.value)} placeholder="enter to location" />
-                <label htmlFor="">Date Of Departure</label>
-                <input type="date" required value={bus_depurture} onChange={(e) => setBus_depurture(e.target.value)} placeholder="enter date" />
-                <label htmlFor="">Cost</label>
-                <input type="text" required value={costPerSeat} onChange={(e)=> setCostPerSeat(e.target.value)} placeholder="enter cost per seat" />
                 
                 <label>Description</label>
                 <select 
@@ -63,6 +52,7 @@ const AddBus = () => {
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)}
                 >
+                    <option value="" disabled>Select type</option>
                     <option value="AC">AC</option>
                     <option value="NON-AC">NON-AC</option>
                 </select>

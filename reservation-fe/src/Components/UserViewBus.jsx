@@ -1,13 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {  useNavigate } from 'react-router-dom';
-import BookBus from "./BookBus";
 
 
 export default function UserViewBus() {
-
- let[bookingPopup,setBookingPopup]=useState(false)
-let[busId,setBusId]=useState("")
     const [bus, setBus] = useState([]);
 let navigate=useNavigate()
     useEffect(() => {
@@ -28,14 +24,6 @@ let navigate=useNavigate()
             });
     }, []);
 
-    
-    function bookbus(id) {
-        setBookingPopup(!bookingPopup)
-        setBusId(id)
-    }
-
-
-
     return (
         <div className="viewBus">
             {Array.isArray(bus) && bus.length > 0 ? (
@@ -54,17 +42,12 @@ let navigate=useNavigate()
                         <span>Bus Number: {item.bus_number}</span>
                         <span>Bus Description:{item.description}</span>
                         
-
-                        <button onClick={()=>{bookbus(item.id)}} >Book Bus</button>
-                        
                     </div>
                 ))
             ) : (
                 <p>No buses available</p>
             )
             }
-
-       {bookingPopup && <BookBus id={busId} bookingPopup={bookingPopup} /> }
         </div>
     );
 }

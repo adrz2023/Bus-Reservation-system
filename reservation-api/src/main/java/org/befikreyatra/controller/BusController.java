@@ -57,11 +57,11 @@ public class BusController {
 		return busService.findAll();
 	}
 
-	@GetMapping("/find")
-	public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(@RequestParam String from_location, @RequestParam String to_location,
-			@RequestParam LocalDate bus_depurture) {
-		return busService.findBuses(from_location, to_location, bus_depurture);
-	}
+//	@GetMapping("/find")
+//	public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(@RequestParam String from_location, @RequestParam String to_location,
+//			@RequestParam LocalDate bus_depurture) {
+//		return busService.findBuses(from_location, to_location, bus_depurture);
+//	}
 
 	@GetMapping("/find/{vendor_id}")
 	public ResponseEntity<ResponseStructure<List<Bus>>> findByVendorId(@PathVariable int vendor_id) {
