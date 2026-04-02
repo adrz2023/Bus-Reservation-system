@@ -16,7 +16,7 @@ public interface TripRepository extends JpaRepository<Trip,Integer> {
   select t from Trip t
   where (:from is null or lower(t.from_location) = :from)
     and (:to is null or lower(t.to_location) = :to)
-    and (:departureDate is null or t.departureDate = :departureDate)
+    and (t.departureDate = COALESCE(:departureDate, t.departureDate))
 """)
     List<Trip> searchTrips(@Param("from") String from,
                            @Param("to") String to,
