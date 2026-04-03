@@ -25,4 +25,7 @@ public class Passenger {
     @JoinColumn(name = "ticket_id")
     @JsonIgnore
     private Ticket ticket;
+
+    @Column
+    private String seatCode;
 }

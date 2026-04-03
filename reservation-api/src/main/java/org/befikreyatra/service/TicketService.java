@@ -1,21 +1,15 @@
 package org.befikreyatra.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
-import org.befikreyatra.dao.BusDao;
-import org.befikreyatra.dao.TicketDao;
-import org.befikreyatra.dao.TripDao;
-import org.befikreyatra.dao.UserDao;
-import org.befikreyatra.dto.PassengerRequest;
-import org.befikreyatra.dto.ResponseStructure;
-import org.befikreyatra.dto.TicketBookingRequest;
-import org.befikreyatra.dto.TicketResponse;
+import jakarta.transaction.Transactional;
+import org.befikreyatra.dao.*;
+import org.befikreyatra.dto.*;
 import org.befikreyatra.exception.AdminNotFoundException;
 import org.befikreyatra.model.*;
 import org.befikreyatra.util.TicketStatus;
+import org.befikreyatra.util.TripSeatStatus;
 import org.befikreyatra.util.TripStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +25,8 @@ public class TicketService {
 	private TicketDao ticketDao;
     @Autowired
     private TripDao tripDao;
+    @Autowired
+    private TripSeatDao tripSeatDao;
 
 
 	public ResponseEntity<ResponseStructure<TicketResponse>>bookTicket(int userId, TicketBookingRequest req){
@@ -119,8 +115,106 @@ public class TicketService {
 			structure.setStatuscode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
 	}
+@Transactional
+public ResponseEntity<ResponseStructure<TicketResponse>> reserveSeats(int userId, SeatReserveRequest req){
+    ResponseStructure<TicketResponse> structure = new ResponseStructure<>();
+    User user = userDao.findById(userId)
+            .orElseThrow(() -> new AdminNotFoundException("Invalid user"));
+    Trip trip = tripDao.findById(req.getTripId())
+            .orElseThrow(() -> new AdminNotFoundException("Invalid trip"));
+    if (trip.getStatus() != TripStatus.ACTIVE) {
+        throw new AdminNotFoundException("Trip is not active");
+    }
+
+    int extraCount;
+    if (req.getExtraPassengers() == null) {
+        extraCount = 0;
+    } else {
+        extraCount = req.getExtraPassengers().size();
+    }
+    int passengerCount = extraCount;
+
+    if (Boolean.TRUE.equals(req.getIncludeSelf())) {
+        passengerCount = passengerCount + 1;
+    }
+
+    if (passengerCount <= 0) throw new AdminNotFoundException("At least one passenger is required");
 
 
+    if (req.getSeatCodes() == null || req.getSeatCodes().size() != passengerCount) {
+        throw new AdminNotFoundException("Seat selection count must match passenger count");
+    }
+
+    Set<String> uniq =new HashSet<>(req.getSeatCodes());
+    if (uniq.size() != req.getSeatCodes().size()) {
+        throw new AdminNotFoundException("Duplicate seat codes are not allowed");
+    }
+
+    List<TripSeat> locked = tripSeatDao.lockSeatsForUpdate(trip.getId(),req.getSeatCodes());
+    if (locked.size() != req.getSeatCodes().size()) {
+        throw new AdminNotFoundException("One or more selected seats do not exist for this trip");
+    }
+    for (TripSeat s : locked) {
+        if (s.getStatus() != TripSeatStatus.AVAILABLE) {
+            throw new AdminNotFoundException("One or more selected seats are not available");
+        }
+    }
+    if (trip.getAvailableSeats() < passengerCount) {
+        throw new AdminNotFoundException("Insufficient seats");
+    }
+
+    Ticket ticket = new Ticket();
+    ticket.setUser(user);
+    ticket.setTrip(trip);
+    ticket.setBus(trip.getBus());
+    ticket.setNumberOfSeatsBooked(passengerCount);
+    ticket.setCost(passengerCount * trip.getCostPerSeat());
+    ticket.setStatus(TicketStatus.BOOKED.toString());
+
+    List<Passenger> passengers = new ArrayList<>();
+
+    int idx = 0;
+    if (Boolean.TRUE.equals(req.getIncludeSelf())) {
+        Passenger self = new Passenger();
+        self.setName(user.getName());
+        self.setAge(user.getAge());
+        self.setGender(user.getGender());
+        self.setSeatCode(req.getSeatCodes().get(idx++));
+        self.setTicket(ticket);
+        passengers.add(self);
+    }
+    if (req.getExtraPassengers() != null) {
+        for (PassengerRequest p : req.getExtraPassengers()) {
+            Passenger group = new Passenger();
+            group.setName(p.getName());
+            group.setAge(p.getAge());
+            group.setGender(p.getGender());
+            group.setSeatCode(req.getSeatCodes().get(idx++));
+            group.setTicket(ticket);
+            passengers.add(group);
+        }
+    }
+    ticket.setPassengers(passengers);
+    ticket = ticketDao.saveTicket(ticket);
+
+    for (TripSeat s : locked) {
+        s.setStatus(TripSeatStatus.BOOKED);
+        s.setTicket(ticket);
+        s.setHeldUntil(null);
+    }
+    tripSeatDao.saveAll(locked);
+
+    // Update availability (safe: count remaining AVAILABLE)
+    int remaining = (int) tripSeatDao.countAvailable(trip.getId());
+    trip.setAvailableSeats(remaining);
+    tripDao.saveTrip(trip);
+
+    structure.setData(mapToTicketResponse(ticket, user, trip.getBus()));
+    structure.setMessege("Ticket booked successfully");
+    structure.setStatuscode(HttpStatus.OK.value());
+    return ResponseEntity.ok(structure);
+
+}
 
 
 	private TicketResponse mapToTicketResponse(Ticket ticket, User user, Bus bus) {

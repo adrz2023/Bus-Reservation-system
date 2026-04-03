@@ -1,5 +1,6 @@
 package org.befikreyatra.controller;
 
+import org.befikreyatra.dto.BusSeatTemplateSaveRequest;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -72,6 +73,14 @@ public class BusController {
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<ResponseStructure<String>> deleteById(@PathVariable(value = "id") int id){
 		return busService.deleteById(id);
+	}
+
+
+	@PutMapping("/{busId}/seat-template")
+	public ResponseEntity<ResponseStructure<String>> saveSeatTemplate(
+			@PathVariable int busId,
+			@RequestBody BusSeatTemplateSaveRequest req) {
+		return busService.saveSeatTemplate(busId, req);
 	}
 
 }

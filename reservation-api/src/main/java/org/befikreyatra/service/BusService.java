@@ -1,17 +1,18 @@
 package org.befikreyatra.service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import org.befikreyatra.dao.BusSeatTemplateDao;
 import org.befikreyatra.dao.VendorDao;
 import org.befikreyatra.dao.BusDao;
-import org.befikreyatra.dto.BusRequest;
-import org.befikreyatra.dto.BusResponse;
-import org.befikreyatra.dto.ResponseStructure;
+import org.befikreyatra.dto.*;
+import org.befikreyatra.exception.AdminNotFoundException;
+import org.befikreyatra.model.BusSeatTemplate;
 import org.befikreyatra.model.Vendor;
 import org.befikreyatra.model.Bus;
 import org.befikreyatra.util.ApprovalStatus;
+import org.befikreyatra.util.SeatType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,9 @@ public class BusService {
 private VendorDao adminDao;
 @Autowired
 private BusDao busDao;
+@Autowired
+private BusSeatTemplateDao busSeatTemplateDao;
+
 
 public ResponseEntity<ResponseStructure<BusResponse>> saveBus(BusRequest busRequest,int vendorId){
 	ResponseStructure<BusResponse> structure= new ResponseStructure<>();
@@ -87,16 +91,6 @@ public ResponseEntity<ResponseStructure<List<Bus>>> findAll() {
 	return ResponseEntity.status(HttpStatus.OK).body(structure);
 }
 
-//public ResponseEntity<ResponseStructure<List<Bus>>> findBuses(String from_location, String to_location, LocalDate bus_departure) {
-//	ResponseStructure<List<Bus>> structure = new ResponseStructure<>();
-//	List<Bus> buses = busDao.FindBuses(from_location, to_location, bus_departure);
-//		structure.setData(buses);
-//	structure.setMessege("List of Buses for entered route on this Date");
-//	structure.setStatuscode(HttpStatus.OK.value());
-//	return ResponseEntity.status(HttpStatus.OK).body(structure);
-//
-//}
-
 
 public ResponseEntity<ResponseStructure<List<Bus>>> findByAdminId(int vendor_id){
 	ResponseStructure<List<Bus>> structure =new ResponseStructure<>();
@@ -134,5 +128,65 @@ private  Bus mapToBus (BusRequest busRequest) {
 		return BusResponse.builder().id(bus.getId()).name(bus.getName()).description(bus.getDescription()).imageUrl(bus.getImageUrl())
 				.build();
 	}
+
+	public ResponseEntity<ResponseStructure<String>> saveSeatTemplate(int busId, BusSeatTemplateSaveRequest req) {
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		Bus bus = busDao.findById(busId).orElseThrow(() -> new AdminNotFoundException("Bus not found"));
+
+		if (req == null || req.getSeats() == null || req.getSeats().isEmpty()) {
+			structure.setMessege("Seat template is empty");
+			structure.setStatuscode(HttpStatus.BAD_REQUEST.value());
+			structure.setData("FAILED");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(structure);
+		}
+
+		// Validate unique seatCode and unique position (deck,row,col)
+		Set<String> seatCodes = new HashSet<>();
+		Set<String> positions = new HashSet<>();
+
+		List<BusSeatTemplate> toSave = new ArrayList<>();
+		for (BusSeatTemplateEntryRequest e : req.getSeats()) {
+			if (e.getSeatCode() == null || e.getSeatCode().isBlank()) {
+				throw new AdminNotFoundException("seatCode required");
+			}
+			String code = e.getSeatCode().trim().toUpperCase();
+			if (!seatCodes.add(code)) {
+				throw new AdminNotFoundException("Duplicate seatCode: " + code);
+			}
+
+			Integer deck = e.getDeck();
+			if (deck == null) {
+				deck = 0;
+			}
+			String posKey = deck + ":" + e.getRowIndex() + ":" + e.getColIndex();
+
+			if (!positions.add(posKey)) {
+				throw new AdminNotFoundException("Duplicate seat position: " + posKey);
+			}
+
+			SeatType type = SeatType.valueOf(String.valueOf(e.getSeatType()).trim().toUpperCase());
+			boolean isBookable = Boolean.TRUE.equals(e.getIsBookable());
+
+			BusSeatTemplate t = BusSeatTemplate.builder()
+					.bus(bus)
+					.seatCode(code)
+					.rowIndex(e.getRowIndex())
+					.colIndex(e.getColIndex())
+					.seatType(type)
+					.deck(deck)
+					.isBookable(isBookable && type == SeatType.SEAT)
+					.build();
+			toSave.add(t);
+		}
+
+		busSeatTemplateDao.deleteByBusId(busId);
+		busSeatTemplateDao.saveAll(toSave);
+
+		structure.setMessege("Seat template saved");
+		structure.setStatuscode(HttpStatus.OK.value());
+		structure.setData("OK");
+		return ResponseEntity.ok(structure);
+	}
+
 
 }

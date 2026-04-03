@@ -43,4 +43,7 @@ public class Trip {
 
     @OneToMany(mappedBy = "trip")
     private List<Ticket> tickets;
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TripSeat> tripSeats;
 }

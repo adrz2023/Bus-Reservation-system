@@ -1,6 +1,7 @@
 package org.befikreyatra.controller;
 
 import org.befikreyatra.dto.ResponseStructure;
+import org.befikreyatra.dto.SeatReserveRequest;
 import org.befikreyatra.dto.TicketBookingRequest;
 import org.befikreyatra.dto.TicketResponse;
 import org.befikreyatra.service.TicketService;
@@ -27,6 +28,13 @@ public class TicketController {
     @GetMapping("/{userId}")
     public ResponseEntity<ResponseStructure<List<TicketResponse>>> findTicket(@PathVariable int userId) {
         return ticketService.findTicketsByUserId(userId);
+    }
+
+    @PostMapping("/trip/{userId}/reserve-seats")
+    public ResponseEntity<ResponseStructure<TicketResponse>> reserveSeats(
+            @PathVariable int userId,
+            @RequestBody SeatReserveRequest req) {
+        return ticketService.reserveSeats(userId, req);
     }
 
 }

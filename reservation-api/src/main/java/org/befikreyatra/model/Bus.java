@@ -41,5 +41,8 @@ public class Bus {
     private String description;
     private String imageUrl;
 
+    @OneToMany(mappedBy = "bus", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusSeatTemplate> seatTemplates;
+
 
 }

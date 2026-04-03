@@ -1,12 +1,18 @@
 package org.befikreyatra.service;
 
+import jakarta.transaction.Transactional;
 import org.befikreyatra.dao.BusDao;
+import org.befikreyatra.dao.BusSeatTemplateDao;
 import org.befikreyatra.dao.TripDao;
+import org.befikreyatra.dao.TripSeatDao;
 import org.befikreyatra.dto.ResponseStructure;
 import org.befikreyatra.dto.TripRequest;
 import org.befikreyatra.dto.TripResponse;
 import org.befikreyatra.model.Bus;
+import org.befikreyatra.model.BusSeatTemplate;
 import org.befikreyatra.model.Trip;
+import org.befikreyatra.model.TripSeat;
+import org.befikreyatra.util.TripSeatStatus;
 import org.befikreyatra.util.TripStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +30,24 @@ public class TripService {
     private TripDao tripDao;
     @Autowired
     private BusDao busDao;
+    @Autowired
+    private BusSeatTemplateDao busSeatTemplateDao;
+    @Autowired
+    private TripSeatDao tripSeatDao;
 
-    public ResponseEntity<ResponseStructure<TripResponse>> craeteTrip(int busId, TripRequest request) {
+
+@Transactional
+public ResponseEntity<ResponseStructure<TripResponse>> craeteTrip(int busId, TripRequest request) {
         ResponseStructure<TripResponse> structure = new ResponseStructure<>();
         Optional<Bus> recBus = busDao.findById(busId);
 
+
+        long bookableCount = busSeatTemplateDao.countBookableByBusId(busId);
+        if (bookableCount <= 0) {
+            structure.setMessege("Bus has no seat template. Please configure seat layout first.");
+            structure.setStatuscode(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(structure);
+        }
         if (recBus.isEmpty()) {
             structure.setMessege("Bus not Found");
             structure.setStatuscode(HttpStatus.NOT_FOUND.value());
@@ -45,6 +64,20 @@ public class TripService {
                 status(TripStatus.ACTIVE).build();
 
         trip = tripDao.saveTrip(trip);
+        List<BusSeatTemplate> template = busSeatTemplateDao.findByBusId(busId);
+        List<TripSeat> tripSeats = new ArrayList<>();
+        for (BusSeatTemplate t : template) {
+            if (!t.isBookable()) continue;
+            TripSeat s = TripSeat.builder()
+                    .trip(trip)
+                    .seatCode(t.getSeatCode())
+                    .status(TripSeatStatus.AVAILABLE)
+                    .heldUntil(null)
+                    .ticket(null)
+                    .build();
+            tripSeats.add(s);
+        }
+        tripSeatDao.saveAll(tripSeats);
         structure.setData(mapToTripResponse(trip));
         structure.setMessege("Trip created successfully");
         structure.setStatuscode(HttpStatus.CREATED.value());
