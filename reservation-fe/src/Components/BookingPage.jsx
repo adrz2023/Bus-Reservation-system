@@ -106,7 +106,7 @@ export default function BookingPage() {
         })),
       });
       alert("Ticket booked successfully");
-      navigate("/userbookings");
+      // navigate("/userbookings");
     } catch {
       alert("Unable to book ticket");
     } finally {

@@ -78,6 +78,10 @@ let navigate=useNavigate()
 function editNavigate(id){
     navigate(`/adminhomepage/editbus/${id}`)
 }
+
+function seatTemplateNavigate(id) {
+    navigate(`/adminhomepage/bus/${id}/seat-template`);
+}
     return (
         <div className="adminBusList">
             {Array.isArray(bus) && bus.length > 0 ? (
@@ -100,6 +104,9 @@ function editNavigate(id){
                         </div>
 
                         <div className="adminBusActions">
+                            <button className="adminBtn adminBtnGhost" onClick={() => { seatTemplateNavigate(item.id) }}>
+                                Seat layout
+                            </button>
                             <button className="adminBtn adminBtnGhost" onClick={() => { editNavigate(item.id) }}>Edit</button>
                             <button className="adminBtn adminBtnPrimary" onClick={() => { removedBus(item.id, item.bus_number) }}>Delete</button>
                         </div>

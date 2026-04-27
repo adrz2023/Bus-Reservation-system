@@ -6,6 +6,7 @@ import AddBus from "./AddBus";
 import EditBus from "./EditBus";
 import ManageTrips from "./ManageTrips";
 import Trips from "./Trips";
+import SeatTemplateDesigner from "./SeatTemplateDesigner";
 import "../Styles/adminTheme.css";
 
 const AdminHomePage = () => {
@@ -55,6 +56,7 @@ const AdminHomePage = () => {
             <Route path="/trips" element={<Trips />} />
             <Route path="/addtrips" element={<ManageTrips />} />
             <Route path="/bus/:busId/trips" element={<ManageTrips />} />
+            <Route path="/bus/:busId/seat-template" element={<SeatTemplateDesigner />} />
           </Routes>
         </div>
       </div>

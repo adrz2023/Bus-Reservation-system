@@ -1,0 +1,96 @@
+.stdHeaderActions {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.stdControls {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.stdControl {
+  display: grid;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.stdControl input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.stdLegend {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stdLegendItem {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  opacity: 0.95;
+}
+
+.stdSwatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.stdSwatch.stdSeat { background: rgba(46, 204, 113, 0.85); }
+.stdSwatch.stdEmpty { background: rgba(189, 195, 199, 0.85); }
+.stdSwatch.stdDriver { background: rgba(241, 196, 15, 0.95); }
+
+.stdGrid {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: auto;
+}
+
+.stdCell {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.stdCellSeat {
+  background: rgba(46, 204, 113, 0.18);
+  border-color: rgba(46, 204, 113, 0.40);
+}
+
+.stdCellEmpty {
+  background: rgba(255, 255, 255, 0.04);
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.stdCellDriver {
+  background: rgba(241, 196, 15, 0.18);
+  border-color: rgba(241, 196, 15, 0.40);
+}
+

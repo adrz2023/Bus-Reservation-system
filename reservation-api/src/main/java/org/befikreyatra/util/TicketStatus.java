@@ -1,5 +1,5 @@
 package org.befikreyatra.util;
 
 public enum TicketStatus {
-	BOOKED, CANCELLED, EXPIRED;
+	AVL,BOOKED, CANCELLED, EXPIRED;
 }
