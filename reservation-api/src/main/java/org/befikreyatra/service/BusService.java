@@ -140,20 +140,16 @@ private  Bus mapToBus (BusRequest busRequest) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(structure);
 		}
 
-		// Validate unique seatCode and unique position (deck,row,col)
+		// Rules:
+		// - Only SEAT cells require unique seatCode
+		// - EMPTY cells do not participate in seatCode uniqueness (seatCode can be null)
+		// - DRIVER is at most one per bus
 		Set<String> seatCodes = new HashSet<>();
 		Set<String> positions = new HashSet<>();
+		boolean driverSeen = false;
 
 		List<BusSeatTemplate> toSave = new ArrayList<>();
 		for (BusSeatTemplateEntryRequest e : req.getSeats()) {
-			if (e.getSeatCode() == null || e.getSeatCode().isBlank()) {
-				throw new AdminNotFoundException("seatCode required");
-			}
-			String code = e.getSeatCode().trim().toUpperCase();
-			if (!seatCodes.add(code)) {
-				throw new AdminNotFoundException("Duplicate seatCode: " + code);
-			}
-
 			Integer deck = e.getDeck();
 			if (deck == null) {
 				deck = 0;
@@ -165,7 +161,30 @@ private  Bus mapToBus (BusRequest busRequest) {
 			}
 
 			SeatType type = SeatType.valueOf(String.valueOf(e.getSeatType()).trim().toUpperCase());
-			boolean isBookable = Boolean.TRUE.equals(e.getIsBookable());
+			String code = null;
+			boolean isBookable = false;
+
+			if (type == SeatType.SEAT) {
+				if (e.getSeatCode() == null || e.getSeatCode().isBlank()) {
+					throw new AdminNotFoundException("seatCode required for SEAT at " + posKey);
+				}
+				code = e.getSeatCode().trim().toUpperCase();
+				if (!seatCodes.add(code)) {
+					throw new AdminNotFoundException("Duplicate seatCode: " + code);
+				}
+				isBookable = Boolean.TRUE.equals(e.getIsBookable());
+			} else if (type == SeatType.DRIVER) {
+				if (driverSeen) {
+					throw new AdminNotFoundException("Only one DRIVER cell allowed per bus");
+				}
+				driverSeen = true;
+				code = "DRIVER";
+				isBookable = false;
+			} else {
+				// EMPTY: seatCode remains null; not bookable
+				code = null;
+				isBookable = false;
+			}
 
 			BusSeatTemplate t = BusSeatTemplate.builder()
 					.bus(bus)

@@ -5,9 +5,8 @@ import org.befikreyatra.dao.BusDao;
 import org.befikreyatra.dao.BusSeatTemplateDao;
 import org.befikreyatra.dao.TripDao;
 import org.befikreyatra.dao.TripSeatDao;
-import org.befikreyatra.dto.ResponseStructure;
-import org.befikreyatra.dto.TripRequest;
-import org.befikreyatra.dto.TripResponse;
+import org.befikreyatra.dto.*;
+import org.befikreyatra.exception.AdminNotFoundException;
 import org.befikreyatra.model.Bus;
 import org.befikreyatra.model.BusSeatTemplate;
 import org.befikreyatra.model.Trip;
@@ -140,6 +139,50 @@ public ResponseEntity<ResponseStructure<TripResponse>> craeteTrip(int busId, Tri
         structure.setData(data);
         structure.setMessege("Trips fetched");
         structure.setStatuscode(HttpStatus.OK.value());
+        return ResponseEntity.ok(structure);
+    }
+
+
+    public ResponseEntity<ResponseStructure<TripSeatsResponse>> getTripSeats(int tripId) {
+        ResponseStructure<TripSeatsResponse> structure = new ResponseStructure<>();
+
+        Trip trip = tripDao.findById(tripId)
+                .orElseThrow(() -> new AdminNotFoundException("Invalid trip"));
+
+        int busId = trip.getBus().getId();
+
+        List<BusSeatTemplate> template = busSeatTemplateDao.findByBusId(busId);
+        List<TripSeat> tripSeats = tripSeatDao.findByTripId(tripId);
+
+        List<TripSeatLayoutEntryDto> layout = new ArrayList<>();
+        for (BusSeatTemplate t : template) {
+            layout.add(TripSeatLayoutEntryDto.builder()
+                    .seatCode(t.getSeatCode())
+                    .rowIndex(t.getRowIndex())
+                    .colIndex(t.getColIndex())
+                    .seatType(t.getSeatType().name())
+                    .deck(t.getDeck() == null ? 0 : t.getDeck())
+                    .isBookable(t.isBookable())
+                    .build());
+        }
+
+        List<TripSeatStatusDto> statuses = new ArrayList<>();
+        for (TripSeat s : tripSeats) {
+            statuses.add(TripSeatStatusDto.builder()
+                    .seatCode(s.getSeatCode())
+                    .status(s.getStatus().name())
+                    .build());
+        }
+
+        structure.setData(TripSeatsResponse.builder()
+                .tripId(tripId)
+                .busId(busId)
+                .layout(layout)
+                .statuses(statuses)
+                .build());
+        structure.setMessege("Trip seats fetched");
+        structure.setStatuscode(HttpStatus.OK.value());
+
         return ResponseEntity.ok(structure);
     }
 }

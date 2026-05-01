@@ -1,0 +1,24 @@
+.tsmRoot { display: grid; gap: 12px; }
+.tsmLegend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 13px; opacity: 0.95; }
+.tsmLegendItem { display: inline-flex; gap: 8px; align-items: center; }
+.tsmDot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+.tsmDot.available { background: #2ecc71; }
+.tsmDot.booked { background: #e74c3c; }
+.tsmDot.selected { background: #3498db; }
+.tsmDot.empty { background: #bdc3c7; }
+
+.tsmGrid { display: grid; gap: 8px; align-content: start; overflow: auto; padding-bottom: 4px; }
+.tsmCell {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 12px;
+  cursor: pointer;
+  color: inherit;
+  background: rgba(255,255,255,0.04);
+}
+.tsmCellEmpty { background: rgba(255,255,255,0.06); cursor: default; border-style: dashed; }
+.tsmCellAvailable { background: rgba(46, 204, 113, 0.20); border-color: rgba(46, 204, 113, 0.35); }
+.tsmCellSelected { background: rgba(52, 152, 219, 0.30); border-color: rgba(52, 152, 219, 0.55); }
+.tsmCellBooked { background: rgba(231, 76, 60, 0.22); cursor: not-allowed; opacity: 0.85; }
+

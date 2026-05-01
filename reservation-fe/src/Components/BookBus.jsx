@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../Styles/bookbusseat.css";
 
 // Trip-based booking modal with group passengers
@@ -8,6 +8,7 @@ import "../Styles/bookbusseat.css";
 // - bookingPopup: boolean
 const BookBus = ({ trip, bookingPopup }) => {
   const [show, setShow] = useState(bookingPopup);
+  const navigate = useNavigate();
 
   const [includeSelf, setIncludeSelf] = useState(true);
   const [extraPassengers, setExtraPassengers] = useState([]);
@@ -66,21 +67,11 @@ const BookBus = ({ trip, bookingPopup }) => {
       return;
     }
 
+    // Seat selection + booking happens on /book/:tripId (uses reserve-seats endpoint)
     setSubmitting(true);
     try {
-      await axios.post(`http://localhost:8080/api/ticket/trip/${userId}`, {
-        tripId: trip.id,
-        includeSelf,
-        extraPassengers: extraPassengers.map((p) => ({
-          name: p.name.trim(),
-          age: Number(p.age),
-          gender: p.gender,
-        })),
-      });
-      alert("Ticket booked successfully");
+      navigate(`/book/${trip.id}`, { state: { trip } });
       close();
-    } catch (err2) {
-      alert("Unable to book ticket");
     } finally {
       setSubmitting(false);
     }

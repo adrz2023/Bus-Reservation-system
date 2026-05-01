@@ -28,7 +28,8 @@ public class BusSeatTemplate {
     @JsonIgnore
     private Bus bus;
 
-    @Column(nullable = false)
+    // Nullable for EMPTY cells. For SEAT cells this should be non-null and unique per bus.
+    @Column
     private String seatCode; // e.g. A1
 
     @Column(nullable = false)

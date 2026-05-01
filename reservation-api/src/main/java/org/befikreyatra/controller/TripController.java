@@ -3,6 +3,7 @@ package org.befikreyatra.controller;
 import org.befikreyatra.dto.ResponseStructure;
 import org.befikreyatra.dto.TripRequest;
 import org.befikreyatra.dto.TripResponse;
+import org.befikreyatra.dto.TripSeatsResponse;
 import org.befikreyatra.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,5 +37,11 @@ public class TripController {
             @RequestParam(required = false) LocalDate departureDate
     ) {
         return tripService.searchTrips(from_location, to_location, departureDate);
+    }
+
+
+    @GetMapping("/{tripId}/seats")
+    public ResponseEntity<ResponseStructure<TripSeatsResponse>> getTripSeats(@PathVariable int tripId) {
+        return tripService.getTripSeats(tripId);
     }
 }

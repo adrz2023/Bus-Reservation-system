@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import "../Styles/bookingPage.css";
 import "../Styles/LandingPage.css";
+import TripSeatMap from "./TripSeatMap";
 
 const API_BASE = "http://localhost:8080";
 
@@ -36,6 +37,10 @@ export default function BookingPage() {
   const [extraPassengers, setExtraPassengers] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
+  const [seatsData, setSeatsData] = useState(null);
+  const [loadingSeats, setLoadingSeats] = useState(false);
+  const [selectedSeatCodes, setSelectedSeatCodes] = useState([]);
+
   // Fallback: if page refreshes and state is lost, try to find trip by id
   useEffect(() => {
     const idNum = Number(tripId);
@@ -59,6 +64,30 @@ export default function BookingPage() {
   const seatsBooked = (includeSelf ? 1 : 0) + extraPassengers.length;
   const totalCost = seatsBooked * (trip?.costPerSeat || 0);
 
+  useEffect(() => {
+    if (!trip?.id) return;
+    setLoadingSeats(true);
+    axios
+      .get(`${API_BASE}/api/trip/${trip.id}/seats`)
+      .then((res) => setSeatsData(res?.data?.data || null))
+      .catch(() => setSeatsData(null))
+      .finally(() => setLoadingSeats(false));
+  }, [trip?.id]);
+
+  useEffect(() => {
+    setSelectedSeatCodes((prev) => prev.slice(0, seatsBooked));
+  }, [seatsBooked]);
+
+  const toggleSeat = (seatCode) => {
+    const code = String(seatCode || "").toUpperCase();
+    if (!code) return;
+    setSelectedSeatCodes((prev) => {
+      if (prev.includes(code)) return prev.filter((x) => x !== code);
+      if (prev.length >= seatsBooked) return prev;
+      return [...prev, code];
+    });
+  };
+
   const addPassenger = () => {
     setExtraPassengers((prev) => [...prev, { name: "", age: "", gender: "MALE" }]);
   };
@@ -75,6 +104,7 @@ export default function BookingPage() {
     if (!trip?.id) return "Trip is missing";
     if (!userId) return "Please login to book";
     if (seatsBooked <= 0) return "At least one passenger is required";
+    if (selectedSeatCodes.length !== seatsBooked) return `Please select exactly ${seatsBooked} seat(s)`;
 
     for (let i = 0; i < extraPassengers.length; i++) {
       const p = extraPassengers[i];
@@ -96,7 +126,7 @@ export default function BookingPage() {
 
     setSubmitting(true);
     try {
-      await axios.post(`${API_BASE}/api/ticket/trip/${userId}`, {
+      await axios.post(`${API_BASE}/api/ticket/trip/${userId}/reserve-seats`, {
         tripId: trip.id,
         includeSelf,
         extraPassengers: extraPassengers.map((p) => ({
@@ -104,6 +134,7 @@ export default function BookingPage() {
           age: Number(p.age),
           gender: p.gender,
         })),
+        seatCodes: selectedSeatCodes,
       });
       alert("Ticket booked successfully");
       // navigate("/userbookings");
@@ -295,6 +326,20 @@ export default function BookingPage() {
                   </div>
                 </div>
               ))}
+
+              <div style={{ marginTop: 12 }}>
+                <div className="bkMuted" style={{ marginBottom: 8 }}>
+                  Select seats ({selectedSeatCodes.length}/{seatsBooked})
+                  {selectedSeatCodes.length > 0 ? `: ${selectedSeatCodes.join(", ")}` : ""}
+                </div>
+                {loadingSeats ? (
+                  <div className="bkMuted">Loading seat map…</div>
+                ) : seatsData ? (
+                  <TripSeatMap seatsData={seatsData} selected={selectedSeatCodes} onToggle={toggleSeat} />
+                ) : (
+                  <div className="bkError">Seat map not available for this trip.</div>
+                )}
+              </div>
 
               <div className="bkTotal">
                 <div>
