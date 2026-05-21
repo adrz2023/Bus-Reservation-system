@@ -1,0 +1,17 @@
+services:
+  - type: web
+    runtime: docker
+    name: reservation-api
+    plan: free
+    rootDir: reservation-api
+    dockerfilePath: ./reservation-api/Dockerfile
+    dockerContext: ./reservation-api
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
